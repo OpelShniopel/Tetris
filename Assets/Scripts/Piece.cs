@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Piece : MonoBehaviour
@@ -16,10 +15,7 @@ public class Piece : MonoBehaviour
         Position = position;
         RotationIndex = 0;
 
-        if (Cells == null)
-        {
-            Cells = new Vector3Int[TetrominoData.Cells.Length]; // 4 when using the default tetrominoes
-        }
+        Cells ??= new Vector3Int[TetrominoData.Cells.Length]; // Initialize the cells array if it is null
 
         for (int i = 0; i < TetrominoData.Cells.Length; i++)
         {
@@ -51,11 +47,12 @@ public class Piece : MonoBehaviour
             HardDrop();
         }
 
-        // Rotate the piece
+        // Rotate the piece to the left
         if (Input.GetKeyDown(KeyCode.Q))
         {
             Rotate(-1);
         }
+        // Rotate the piece to the right
         else if (Input.GetKeyDown(KeyCode.E))
         {
             Rotate(1);
@@ -96,11 +93,9 @@ public class Piece : MonoBehaviour
 
         ApplyRotationMatrix(direction);
 
-        if (!TestWallKicks(RotationIndex, direction))
-        {
-            RotationIndex = oldRotationIndex;
-            ApplyRotationMatrix(-direction);
-        }
+        if (TestWallKicks(RotationIndex, direction)) return;
+        RotationIndex = oldRotationIndex;
+        ApplyRotationMatrix(-direction);
     }
 
     private void ApplyRotationMatrix(int direction)
@@ -163,7 +158,7 @@ public class Piece : MonoBehaviour
 
         return Wrap(wallKickIndex, 0, TetrominoData.WallKicks.GetLength(0));
     }
-    
+
     private static int Wrap(int input, int min, int max)
     {
         if (input < min)
