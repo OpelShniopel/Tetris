@@ -7,20 +7,20 @@ public class Piece : MonoBehaviour
     public TetrominoData TetrominoData { get; private set; }
     public Vector3Int[] Cells { get; private set; }
     public Vector3Int Position { get; private set; }
-    public int RotationIndex {  get; private set; }
-    
+    public int RotationIndex { get; private set; }
+
     public void Initialize(Board board, Vector3Int position, TetrominoData tetrominoData)
     {
         TetrominoData = tetrominoData;
         Board = board;
         Position = position;
         RotationIndex = 0;
-        
+
         if (Cells == null)
         {
             Cells = new Vector3Int[TetrominoData.Cells.Length]; // 4 when using the default tetrominoes
         }
-        
+
         for (int i = 0; i < TetrominoData.Cells.Length; i++)
         {
             Cells[i] = (Vector3Int)TetrominoData.Cells[i];
@@ -30,7 +30,7 @@ public class Piece : MonoBehaviour
     private void Update()
     {
         Board.Clear(this);
-        
+
         // Move the piece left or right
         if (Input.GetKeyDown(KeyCode.A))
         {
@@ -40,7 +40,7 @@ public class Piece : MonoBehaviour
         {
             Move(Vector2Int.right);
         }
-        
+
         // Move the piece down
         if (Input.GetKeyDown(KeyCode.S))
         {
@@ -60,7 +60,7 @@ public class Piece : MonoBehaviour
         {
             Rotate(1);
         }
-        
+
         Board.Set(this);
     }
 
@@ -69,17 +69,17 @@ public class Piece : MonoBehaviour
         Vector3Int newPosition = Position;
         newPosition.x += direction.x;
         newPosition.y += direction.y;
-        
+
         bool isValidPosition = Board.IsValidPosition(this, newPosition);
-        
+
         if (isValidPosition)
         {
             Position = newPosition;
         }
-    
+
         return isValidPosition;
     }
-    
+
     private void HardDrop()
     {
         while (Move(Vector2Int.down))
@@ -91,8 +91,20 @@ public class Piece : MonoBehaviour
     // SRS rotation system (Super Rotation System)
     private void Rotate(int direction)
     {
+        int oldRotationIndex = RotationIndex;
         RotationIndex = Wrap(RotationIndex + direction, 0, 4);
-        
+
+        ApplyRotationMatrix(direction);
+
+        if (!TestWallKicks(RotationIndex, direction))
+        {
+            RotationIndex = oldRotationIndex;
+            ApplyRotationMatrix(-direction);
+        }
+    }
+
+    private void ApplyRotationMatrix(int direction)
+    {
         for (int i = 0; i < Cells.Length; i++)
         {
             Vector3 cell = Cells[i];
@@ -105,21 +117,53 @@ public class Piece : MonoBehaviour
                 case Tetromino.O:
                     cell.x -= 0.5f;
                     cell.y -= 0.5f;
-                    x = Mathf.CeilToInt(cell.x * Data.RotationMatrix[0] * direction + cell.y * Data.RotationMatrix[1] * direction);
-                    y = Mathf.CeilToInt(cell.x * Data.RotationMatrix[2] * direction + cell.y * Data.RotationMatrix[3] * direction);
+                    x = Mathf.CeilToInt(cell.x * Data.RotationMatrix[0] * direction +
+                                        cell.y * Data.RotationMatrix[1] * direction);
+                    y = Mathf.CeilToInt(cell.x * Data.RotationMatrix[2] * direction +
+                                        cell.y * Data.RotationMatrix[3] * direction);
                     break;
-                
+
                 default:
-                    x = Mathf.RoundToInt(cell.x * Data.RotationMatrix[0] * direction + cell.y * Data.RotationMatrix[1] * direction);
-                    y = Mathf.RoundToInt(cell.x * Data.RotationMatrix[2] * direction + cell.y * Data.RotationMatrix[3] * direction);
+                    x = Mathf.RoundToInt(cell.x * Data.RotationMatrix[0] * direction +
+                                         cell.y * Data.RotationMatrix[1] * direction);
+                    y = Mathf.RoundToInt(cell.x * Data.RotationMatrix[2] * direction +
+                                         cell.y * Data.RotationMatrix[3] * direction);
                     break;
             }
-            
+
             Cells[i] = new Vector3Int(x, y, 0);
         }
     }
 
-    // Wrap the input between the min and max values
+    private bool TestWallKicks(int rotationIndex, int rotationDirection)
+    {
+        int wallKickIndex = GetWallKickIndex(rotationIndex, rotationDirection);
+
+        for (int i = 0; i < TetrominoData.WallKicks.GetLength(1); i++)
+        {
+            Vector2Int wallKick = TetrominoData.WallKicks[wallKickIndex, i];
+
+            if (Move(wallKick))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private int GetWallKickIndex(int rotationIndex, int rotationDirection)
+    {
+        int wallKickIndex = rotationIndex * 2;
+
+        if (rotationDirection < 0)
+        {
+            wallKickIndex--;
+        }
+
+        return Wrap(wallKickIndex, 0, TetrominoData.WallKicks.GetLength(0));
+    }
+    
     private static int Wrap(int input, int min, int max)
     {
         if (input < min)
