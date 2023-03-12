@@ -31,18 +31,28 @@ public class Piece : MonoBehaviour
         Board.Clear(this);
 
         // automatically move block one square down after set amount of time
-        if(GravityTimerLeft <= .0f)
+        if (GravityTimerLeft <= .0f)
         {
             Move(Vector2Int.down);
             GravityTimerLeft = GravityTimer;
         }
+
         GravityTimerLeft -= Time.deltaTime;
 
-        // Move the piece left or right
+        // Get the game inputs from the player and move the piece
+        GameInputs();
+
+        Board.Set(this);
+    }
+
+    private void GameInputs()
+    {
+        // Move the piece to the left
         if (Input.GetKeyDown(KeyCode.A))
         {
             Move(Vector2Int.left);
         }
+        // Move the piece to the right
         else if (Input.GetKeyDown(KeyCode.D))
         {
             Move(Vector2Int.right);
@@ -53,6 +63,7 @@ public class Piece : MonoBehaviour
         {
             Move(Vector2Int.down);
         }
+        // Hard drop the piece
         else if (Input.GetKeyDown(KeyCode.Space))
         {
             HardDrop();
@@ -68,8 +79,6 @@ public class Piece : MonoBehaviour
         {
             Rotate(1);
         }
-
-        Board.Set(this);
     }
 
     private bool Move(Vector2Int direction)
@@ -144,29 +153,29 @@ public class Piece : MonoBehaviour
     private bool TestWallKicks(int rotationIndex, int rotationDirection)
     {
         int wallKickIndex = GetWallKickIndex(rotationIndex, rotationDirection);
-    
+
         for (int i = 0; i < TetrominoData.WallKicks.GetLength(1); i++)
         {
             Vector2Int wallKick = TetrominoData.WallKicks[wallKickIndex, i];
-    
+
             if (Move(wallKick))
             {
                 return true;
             }
         }
-    
+
         return false;
     }
 
     private int GetWallKickIndex(int rotationIndex, int rotationDirection)
     {
         int wallKickIndex = rotationIndex * 2;
-    
+
         if (rotationDirection < 0)
         {
             wallKickIndex--;
         }
-    
+
         return Wrap(wallKickIndex, 0, TetrominoData.WallKicks.GetLength(0));
     }
 
