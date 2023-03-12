@@ -18,7 +18,8 @@ public class Piece : MonoBehaviour
         RotationIndex = 0;
         GravityTimer = gravityTimer;
 
-        Cells ??= new Vector3Int[TetrominoData.Cells.Length]; // Initialize the cells array if it is null
+        // Initialize the cells array if it is null
+        Cells ??= new Vector3Int[TetrominoData.Cells.Length];
 
         for (int i = 0; i < TetrominoData.Cells.Length; i++)
         {
@@ -101,7 +102,7 @@ public class Piece : MonoBehaviour
     {
         while (Move(Vector2Int.down))
         {
-            // Do nothing
+            // Loop until the piece can't move down anymore
         }
     }
 
