@@ -49,7 +49,7 @@ public class Board : MonoBehaviour
         int randomIndex = Random.Range(0, Tetrominoes.Length);
         TetrominoData data = Tetrominoes[randomIndex];
 
-        CurrentPiece.Initialize(this, SpawnPosition, data); // Initialize the piece
+        CurrentPiece.Initialize(this, SpawnPosition, data, 1.0f); // Initialize the piece
         Set(CurrentPiece); // Set the piece on the board
     }
 
