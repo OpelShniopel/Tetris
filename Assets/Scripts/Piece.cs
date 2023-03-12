@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Piece : MonoBehaviour
@@ -105,9 +104,9 @@ public class Piece : MonoBehaviour
 
         ApplyRotationMatrix(direction);
 
-        if (TestWallKicks(RotationIndex, direction)) return;
-        RotationIndex = oldRotationIndex;
-        ApplyRotationMatrix(-direction);
+        // if (TestWallKicks(RotationIndex, direction)) return;
+        // RotationIndex = oldRotationIndex;
+        // ApplyRotationMatrix(-direction);
     }
 
     private void ApplyRotationMatrix(int direction)
@@ -145,29 +144,29 @@ public class Piece : MonoBehaviour
     private bool TestWallKicks(int rotationIndex, int rotationDirection)
     {
         int wallKickIndex = GetWallKickIndex(rotationIndex, rotationDirection);
-
+    
         for (int i = 0; i < TetrominoData.WallKicks.GetLength(1); i++)
         {
             Vector2Int wallKick = TetrominoData.WallKicks[wallKickIndex, i];
-
+    
             if (Move(wallKick))
             {
                 return true;
             }
         }
-
+    
         return false;
     }
 
     private int GetWallKickIndex(int rotationIndex, int rotationDirection)
     {
         int wallKickIndex = rotationIndex * 2;
-
+    
         if (rotationDirection < 0)
         {
             wallKickIndex--;
         }
-
+    
         return Wrap(wallKickIndex, 0, TetrominoData.WallKicks.GetLength(0));
     }
 
