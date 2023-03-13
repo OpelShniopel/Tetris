@@ -76,7 +76,7 @@ public static class Data
         }
     };
 
-    private static readonly Vector2Int[,] WallKicksJlostz =
+    private static readonly Vector2Int[,] WallKicksOther =
     {
         {
             new(0, 0), new(-1, 0), new(-1, 1), new(0, -2),
@@ -115,11 +115,11 @@ public static class Data
     internal static readonly Dictionary<Tetromino, Vector2Int[,]> WallKicks = new()
     {
         { Tetromino.I, WallKicksI },
-        { Tetromino.J, WallKicksJlostz },
-        { Tetromino.L, WallKicksJlostz },
-        { Tetromino.O, WallKicksJlostz },
-        { Tetromino.S, WallKicksJlostz },
-        { Tetromino.T, WallKicksJlostz },
-        { Tetromino.Z, WallKicksJlostz }
+        { Tetromino.J, WallKicksOther },
+        { Tetromino.L, WallKicksOther },
+        { Tetromino.O, WallKicksOther },
+        { Tetromino.S, WallKicksOther },
+        { Tetromino.T, WallKicksOther },
+        { Tetromino.Z, WallKicksOther }
     };
 }
