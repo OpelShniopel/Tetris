@@ -13,9 +13,11 @@ public class Piece : MonoBehaviour
 
 
     public float stepDelay = 1f;
+    public float moveDelay = 0.1f;
     public float lockDelay = 0.5f;
 
     private float stepTime;
+    private float moveTime;
     private float lockTime;
 
     public void Initialize(Board board, Vector3Int position, TetrominoData tetrominoData)
@@ -25,7 +27,9 @@ public class Piece : MonoBehaviour
         Board = board;
         Position = position;
         RotationIndex = 0;
-        stepTime = Time.time + this.stepDelay;
+        
+        stepTime = Time.time + stepDelay;
+        moveTime = Time.time + moveDelay;
         lockTime = 0f;
 
         // Initialize the cells array if it is null
@@ -42,6 +46,8 @@ public class Piece : MonoBehaviour
         Board.Clear(this);
 
         lockTime += Time.deltaTime;
+        
+        GameInputs();
 
         // automatically move block one square down after set amount of time
         //if (GravityTimerLeft <= .0f)
@@ -53,46 +59,58 @@ public class Piece : MonoBehaviour
         //GravityTimerLeft -= Time.deltaTime;
 
         // Get the game inputs from the player and move the piece
-        GameInputs();
+        
 
-        if(Time.time >= this.stepTime)
-        {
+        // Allow the player to hold movement keys but only after a move delay
+        // so it does not move too fast
+        if (Time.time > moveTime) {
+            HandleMoveInputs();
+        }
+
+        // Advance the piece to the next row every x seconds
+        if (Time.time > stepTime) {
             Step();
         }
 
         Board.Set(this);
     }
+    
+    private void HandleMoveInputs()
+    {
+        // Soft drop movement
+        if (Input.GetKey(KeyCode.S))
+        {
+            if (Move(Vector2Int.down)) {
+                // Update the step time to prevent double movement
+                stepTime = Time.time + stepDelay;
+            }
+        }
+
+        // Left/right movement
+        if (Input.GetKey(KeyCode.A)) {
+            Move(Vector2Int.left);
+        } else if (Input.GetKey(KeyCode.D)) {
+            Move(Vector2Int.right);
+        }
+    }
 
     private void Step()
     {
-        this.stepTime = Time.time + this.stepDelay;
+        stepTime = Time.time + stepDelay;
+
+        // Step down to the next row
         Move(Vector2Int.down);
-        if(this.lockTime >= this.lockTime)
-        {
+
+        // Once the piece has been inactive for too long it becomes locked
+        if (lockTime >= lockDelay) {
             Lock();
         }
     }
 
     private void GameInputs()
     {
-        // Move the piece to the left
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Move(Vector2Int.left);
-        }
-        // Move the piece to the right
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            Move(Vector2Int.right);
-        }
-
-        // Move the piece down
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            Move(Vector2Int.down);
-        }
         // Hard drop the piece
-        else if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             HardDrop();
         }
@@ -120,6 +138,8 @@ public class Piece : MonoBehaviour
         if (isValidPosition)
         {
             Position = newPosition;
+            moveTime = Time.time + moveDelay;
+            lockTime = 0f; // reset
         }
 
         return isValidPosition;
@@ -130,7 +150,6 @@ public class Piece : MonoBehaviour
         while (Move(Vector2Int.down))
         {
             // Loop until the piece can't move down anymore
-            continue;
         }
         Lock();
     }
