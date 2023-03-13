@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 public class Piece : MonoBehaviour
 {
@@ -7,30 +6,29 @@ public class Piece : MonoBehaviour
     public TetrominoData TetrominoData { get; private set; }
     public Vector3Int[] Cells { get; private set; }
     public Vector3Int Position { get; private set; }
+
     public int RotationIndex { get; private set; }
     //public float GravityTimer { get; private set; } // time frame after which move block one block down
     //public float GravityTimerLeft { get; private set; }
-
-
+    
     public float stepDelay = 1f;
     public float moveDelay = 0.1f;
     public float lockDelay = 0.5f;
 
-    private float stepTime;
-    private float moveTime;
-    private float lockTime;
+    private float _stepTime;
+    private float _moveTime;
+    private float _lockTime;
 
     public void Initialize(Board board, Vector3Int position, TetrominoData tetrominoData)
     {
-        
         TetrominoData = tetrominoData;
         Board = board;
         Position = position;
         RotationIndex = 0;
-        
-        stepTime = Time.time + stepDelay;
-        moveTime = Time.time + moveDelay;
-        lockTime = 0f;
+
+        _stepTime = Time.time + stepDelay;
+        _moveTime = Time.time + moveDelay;
+        _lockTime = 0f;
 
         // Initialize the cells array if it is null
         Cells ??= new Vector3Int[TetrominoData.Cells.Length];
@@ -45,9 +43,10 @@ public class Piece : MonoBehaviour
     {
         Board.Clear(this);
 
-        lockTime += Time.deltaTime;
-        
-        GameInputs();
+        _lockTime += Time.deltaTime;
+
+        // Get the game inputs from the player and move the piece
+        HandleRotationInputs();
 
         // automatically move block one square down after set amount of time
         //if (GravityTimerLeft <= .0f)
@@ -58,56 +57,58 @@ public class Piece : MonoBehaviour
 
         //GravityTimerLeft -= Time.deltaTime;
 
-        // Get the game inputs from the player and move the piece
-        
 
         // Allow the player to hold movement keys but only after a move delay
         // so it does not move too fast
-        if (Time.time > moveTime) {
+        if (Time.time > _moveTime)
+        {
             HandleMoveInputs();
         }
 
         // Advance the piece to the next row every x seconds
-        if (Time.time > stepTime) {
+        if (Time.time > _stepTime)
+        {
             Step();
         }
 
         Board.Set(this);
     }
-    
+
     private void HandleMoveInputs()
     {
         // Soft drop movement
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S) && Move(Vector2Int.down))
         {
-            if (Move(Vector2Int.down)) {
-                // Update the step time to prevent double movement
-                stepTime = Time.time + stepDelay;
-            }
+            // Update the step time to prevent double movement
+            _stepTime = Time.time + stepDelay;
         }
 
         // Left/right movement
-        if (Input.GetKey(KeyCode.A)) {
+        if (Input.GetKey(KeyCode.A))
+        {
             Move(Vector2Int.left);
-        } else if (Input.GetKey(KeyCode.D)) {
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
             Move(Vector2Int.right);
         }
     }
 
     private void Step()
     {
-        stepTime = Time.time + stepDelay;
+        _stepTime = Time.time + stepDelay;
 
         // Step down to the next row
         Move(Vector2Int.down);
 
         // Once the piece has been inactive for too long it becomes locked
-        if (lockTime >= lockDelay) {
+        if (_lockTime >= lockDelay)
+        {
             Lock();
         }
     }
 
-    private void GameInputs()
+    private void HandleRotationInputs()
     {
         // Hard drop the piece
         if (Input.GetKeyDown(KeyCode.Space))
@@ -138,8 +139,8 @@ public class Piece : MonoBehaviour
         if (isValidPosition)
         {
             Position = newPosition;
-            moveTime = Time.time + moveDelay;
-            lockTime = 0f; // reset
+            _moveTime = Time.time + moveDelay;
+            _lockTime = 0f; // reset
         }
 
         return isValidPosition;
@@ -151,6 +152,7 @@ public class Piece : MonoBehaviour
         {
             // Loop until the piece can't move down anymore
         }
+
         Lock();
     }
 
@@ -164,7 +166,7 @@ public class Piece : MonoBehaviour
     // SRS rotation system (Super Rotation System)
     private void Rotate(int direction)
     {
-        int oldRotationIndex = RotationIndex;
+        //int oldRotationIndex = RotationIndex;
         RotationIndex = Wrap(RotationIndex + direction, 0, 4);
 
         ApplyRotationMatrix(direction);
