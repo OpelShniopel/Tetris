@@ -7,19 +7,15 @@ public class Piece : MonoBehaviour
     public Vector3Int[] Cells { get; private set; }
     public Vector3Int Position { get; private set; }
     public int RotationIndex { get; private set; }
-    public float GravityTimer { get; private set; } // time frame after which move block one block down
-    public float GravityTimerLeft { get; private set; }
 
-    public void Initialize(Board board, Vector3Int position, TetrominoData tetrominoData, float gravityTimer)
+    public void Initialize(Board board, Vector3Int position, TetrominoData tetrominoData)
     {
         TetrominoData = tetrominoData;
         Board = board;
         Position = position;
         RotationIndex = 0;
-        GravityTimer = gravityTimer;
 
-        // Initialize the cells array if it is null
-        Cells ??= new Vector3Int[TetrominoData.Cells.Length];
+        Cells ??= new Vector3Int[TetrominoData.Cells.Length]; // Initialize the cells array if it is null
 
         for (int i = 0; i < TetrominoData.Cells.Length; i++)
         {
@@ -31,29 +27,11 @@ public class Piece : MonoBehaviour
     {
         Board.Clear(this);
 
-        // automatically move block one square down after set amount of time
-        if (GravityTimerLeft <= .0f)
-        {
-            Move(Vector2Int.down);
-            GravityTimerLeft = GravityTimer;
-        }
-
-        GravityTimerLeft -= Time.deltaTime;
-
-        // Get the game inputs from the player and move the piece
-        GameInputs();
-
-        Board.Set(this);
-    }
-
-    private void GameInputs()
-    {
-        // Move the piece to the left
+        // Move the piece left or right
         if (Input.GetKeyDown(KeyCode.A))
         {
             Move(Vector2Int.left);
         }
-        // Move the piece to the right
         else if (Input.GetKeyDown(KeyCode.D))
         {
             Move(Vector2Int.right);
@@ -64,7 +42,6 @@ public class Piece : MonoBehaviour
         {
             Move(Vector2Int.down);
         }
-        // Hard drop the piece
         else if (Input.GetKeyDown(KeyCode.Space))
         {
             HardDrop();
@@ -80,6 +57,15 @@ public class Piece : MonoBehaviour
         {
             Rotate(1);
         }
+
+        Board.Set(this);
+    }
+
+    private void Lock()
+    {
+        this.board.Set(this);
+        this.board.ClearLines();
+        this.board.SpawnPiece();
     }
 
     private bool Move(Vector2Int direction)
@@ -102,7 +88,7 @@ public class Piece : MonoBehaviour
     {
         while (Move(Vector2Int.down))
         {
-            // Loop until the piece can't move down anymore
+            continue;
         }
     }
 
@@ -114,9 +100,9 @@ public class Piece : MonoBehaviour
 
         ApplyRotationMatrix(direction);
 
-        // if (TestWallKicks(RotationIndex, direction)) return;
-        // RotationIndex = oldRotationIndex;
-        // ApplyRotationMatrix(-direction);
+        if (TestWallKicks(RotationIndex, direction)) return;
+        RotationIndex = oldRotationIndex;
+        ApplyRotationMatrix(-direction);
     }
 
     private void ApplyRotationMatrix(int direction)
