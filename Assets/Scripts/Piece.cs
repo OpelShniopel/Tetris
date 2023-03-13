@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Piece : MonoBehaviour
 {
@@ -10,13 +11,23 @@ public class Piece : MonoBehaviour
     public float GravityTimer { get; private set; } // time frame after which move block one block down
     public float GravityTimerLeft { get; private set; }
 
+
+    public float stepDelay = 1f;
+    public float lockDelay = 0.5f;
+
+    private float stepTime;
+    private float lockTime;
+
     public void Initialize(Board board, Vector3Int position, TetrominoData tetrominoData, float gravityTimer)
     {
+        stepTime = s
         TetrominoData = tetrominoData;
         Board = board;
         Position = position;
         RotationIndex = 0;
         GravityTimer = gravityTimer;
+        stepTime = Time.time + this.stepDelay;
+        lockTime = 0f;
 
         // Initialize the cells array if it is null
         Cells ??= new Vector3Int[TetrominoData.Cells.Length];
@@ -31,6 +42,8 @@ public class Piece : MonoBehaviour
     {
         Board.Clear(this);
 
+        lockTime += Time.deltaTime;
+
         // automatically move block one square down after set amount of time
         if (GravityTimerLeft <= .0f)
         {
@@ -43,7 +56,22 @@ public class Piece : MonoBehaviour
         // Get the game inputs from the player and move the piece
         GameInputs();
 
+        if(Time.time >= this.stepTime)
+        {
+            Step();
+        }
+
         Board.Set(this);
+    }
+
+    private void Step()
+    {
+        this.stepTime = Time.time + this.stepDelay;
+        Move(Vector2Int.down);
+        if(this.lockTime >= this.lockTime)
+        {
+            Lock();
+        }
     }
 
     private void GameInputs()
@@ -103,7 +131,9 @@ public class Piece : MonoBehaviour
         while (Move(Vector2Int.down))
         {
             // Loop until the piece can't move down anymore
+            continue;
         }
+        Lock();
     }
 
     private void Lock()
