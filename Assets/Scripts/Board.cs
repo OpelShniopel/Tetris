@@ -3,20 +3,28 @@ using UnityEngine.Tilemaps;
 
 public class Board : MonoBehaviour
 {
-    public Tilemap Tilemap { get; private set; } // The Tilemap component of the child object
-    public Piece CurrentPiece { get; private set; } // The Piece component of the child object
-    [field: SerializeField] public TetrominoData[] Tetrominoes { get; set; } // The tetromino data for each tetromino
+    // The Tilemap component of the child object
+    public Tilemap Tilemap { get; private set; }
 
-    [field: SerializeField]
-    public Vector3Int SpawnPosition { get; set; } // The position where the tetrominoes will spawn
+    // The Piece component of the child object
+    public Piece CurrentPiece { get; private set; }
 
+    // The tetromino data for each tetromino
+    [field: SerializeField] public TetrominoData[] Tetrominoes { get; set; }
+
+    // The position where the tetrominoes will spawn
+    [field: SerializeField] public Vector3Int SpawnPosition { get; set; }
+
+    // The size of the board
     [field: SerializeField] public Vector2Int BoardSize { get; set; }
 
     public RectInt Bounds
     {
         get
         {
+            // Calculate the position of the board's bottom left corner.
             Vector2Int position = new Vector2Int(-BoardSize.x / 2, -BoardSize.y / 2);
+            // Return a rectangle with the calculated position and the board's size.
             return new RectInt(position, BoardSize);
         }
     }
@@ -26,10 +34,13 @@ public class Board : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        Tilemap = GetComponentInChildren<Tilemap>(); // Get the Tilemap component from the child object
-        CurrentPiece = GetComponentInChildren<Piece>(); // Get the Piece component from the child object
+        Tilemap = GetComponentInChildren<Tilemap>(); // Get the Tilemap component from the child object.
+        CurrentPiece = GetComponentInChildren<Piece>(); // Get the Piece component from the child object.
+        InitializeTetrominoes(); // Initialize the tetromino data for each tetromino.
+    }
 
-        // Initialize the tetromino data for each tetromino
+    private void InitializeTetrominoes()
+    {
         for (int i = 0; i < Tetrominoes.Length; i++)
         {
             Tetrominoes[i].Initialize();
@@ -46,11 +57,15 @@ public class Board : MonoBehaviour
     /// </summary>
     public void SpawnRandomPiece()
     {
+        // Randomly choose a piece
         int randomIndex = Random.Range(0, Tetrominoes.Length);
         TetrominoData data = Tetrominoes[randomIndex];
 
-        CurrentPiece.Initialize(this, SpawnPosition, data); // Initialize the piece
-        Set(CurrentPiece); // Set the piece on the board
+        // Initialize the piece at the spawn position
+        CurrentPiece.Initialize(this, SpawnPosition, data, 1.0f);
+
+        // Set the piece on the board
+        Set(CurrentPiece);
     }
 
     /// <summary>
@@ -59,10 +74,14 @@ public class Board : MonoBehaviour
     /// <param name="piece"></param>
     public void Set(Piece piece)
     {
+        // Loop through each cell in the piece
         for (int i = 0; i < piece.Cells.Length; i++)
         {
-            Vector3Int tilePosition = piece.Cells[i] + piece.Position; // Get the tile position
-            Tilemap.SetTile(tilePosition, piece.TetrominoData.Tile); // Set the tile
+            // Get the tile position
+            Vector3Int tilePosition = piece.Cells[i] + piece.Position;
+
+            // Set the tile
+            Tilemap.SetTile(tilePosition, piece.TetrominoData.Tile);
         }
     }
 
@@ -98,65 +117,4 @@ public class Board : MonoBehaviour
 
         return true;
     }
-
-    public void ClearLines()
-    {
-        RectInt bounds = this.Bounds;
-        int row = bounds.yMin;
-        while (row < bounds.yMax)
-        {
-            if (IsLineFull(row))
-            {
-                LineClear(row);
-            }
-            else
-            {
-                row++;
-            }
-        }
-    }
-
-    private bool IsLineFull(int row)
-    {
-        RectInt bounds = this.Bounds;
-
-        for(int col = bounds.xMin; col < bounds.xMax; col++)
-        {
-            Vector3Int position = new Vector3Int(col, row, 0);
-
-            if (!this.Tilemap.HasTile(position))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    public void LineClear(int row)
-    {
-        RectInt bounds = this.Bounds;
-
-        for(int col = bounds.xMin; col < bounds.xMax; col++)
-        {
-            Vector3Int position = new Vector3Int(col, row, 0);
-            this.Tilemap.SetTile(position, null);
-        }
-
-        while(row < bounds.yMax)
-        {
-            for(int col = bounds.xMin; col < bounds.xMax; col++)
-            {
-                Vector3Int position = new Vector3Int(col, row + 1, 0);
-                TileBase above = this.Tilemap.GetTile(position);
-
-                position = new Vector3Int(col, row, 0);
-                this.Tilemap.SetTile(position, above);
-            }
-
-            row++;
-        }
-    }
-
-
-    
 }
