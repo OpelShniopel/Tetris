@@ -106,6 +106,13 @@ public class Piece : MonoBehaviour
         }
     }
 
+    private void Lock()
+    {
+        Board.Set(this);
+        Board.ClearLines();
+        Board.SpawnRandomPiece();
+    }
+
     // SRS rotation system (Super Rotation System)
     private void Rotate(int direction)
     {
