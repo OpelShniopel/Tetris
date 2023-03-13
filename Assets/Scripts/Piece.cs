@@ -8,8 +8,8 @@ public class Piece : MonoBehaviour
     public Vector3Int[] Cells { get; private set; }
     public Vector3Int Position { get; private set; }
     public int RotationIndex { get; private set; }
-    public float GravityTimer { get; private set; } // time frame after which move block one block down
-    public float GravityTimerLeft { get; private set; }
+    //public float GravityTimer { get; private set; } // time frame after which move block one block down
+    //public float GravityTimerLeft { get; private set; }
 
 
     public float stepDelay = 1f;
@@ -18,14 +18,13 @@ public class Piece : MonoBehaviour
     private float stepTime;
     private float lockTime;
 
-    public void Initialize(Board board, Vector3Int position, TetrominoData tetrominoData, float gravityTimer)
+    public void Initialize(Board board, Vector3Int position, TetrominoData tetrominoData)
     {
-        stepTime = s
+        
         TetrominoData = tetrominoData;
         Board = board;
         Position = position;
         RotationIndex = 0;
-        GravityTimer = gravityTimer;
         stepTime = Time.time + this.stepDelay;
         lockTime = 0f;
 
@@ -45,13 +44,13 @@ public class Piece : MonoBehaviour
         lockTime += Time.deltaTime;
 
         // automatically move block one square down after set amount of time
-        if (GravityTimerLeft <= .0f)
-        {
-            Move(Vector2Int.down);
-            GravityTimerLeft = GravityTimer;
-        }
+        //if (GravityTimerLeft <= .0f)
+        //{
+        //    Move(Vector2Int.down);
+        //    GravityTimerLeft = GravityTimer;
+        //}
 
-        GravityTimerLeft -= Time.deltaTime;
+        //GravityTimerLeft -= Time.deltaTime;
 
         // Get the game inputs from the player and move the piece
         GameInputs();

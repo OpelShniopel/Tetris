@@ -62,7 +62,7 @@ public class Board : MonoBehaviour
         TetrominoData data = Tetrominoes[randomIndex];
 
         // Initialize the piece at the spawn position
-        CurrentPiece.Initialize(this, SpawnPosition, data, 1.0f);
+        CurrentPiece.Initialize(this, SpawnPosition, data);
 
         // Set the piece on the board
         Set(CurrentPiece);
