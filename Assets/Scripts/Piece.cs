@@ -63,9 +63,9 @@ public class Piece : MonoBehaviour
 
     private void Lock()
     {
-        this.board.Set(this);
-        this.board.ClearLines();
-        this.board.SpawnPiece();
+        this.Board.Set(this);
+        this.Board.ClearLines();
+        this.Board.SpawnPiece();
     }
 
     private bool Move(Vector2Int direction)
