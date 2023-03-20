@@ -120,7 +120,7 @@ public class Board : MonoBehaviour
 
     public void ClearLines()
     {
-        RectInt bounds = this.Bounds;
+        RectInt bounds = Bounds;
         int row = bounds.yMin;
         while (row < bounds.yMax)
         {
@@ -137,13 +137,13 @@ public class Board : MonoBehaviour
 
     private bool IsLineFull(int row)
     {
-        RectInt bounds = this.Bounds;
+        RectInt bounds = Bounds;
 
         for (int col = bounds.xMin; col < bounds.xMax; col++)
         {
             Vector3Int position = new Vector3Int(col, row, 0);
 
-            if (!this.Tilemap.HasTile(position))
+            if (!Tilemap.HasTile(position))
             {
                 return false;
             }
@@ -158,7 +158,7 @@ public class Board : MonoBehaviour
         for (int col = bounds.xMin; col < bounds.xMax; col++)
         {
             Vector3Int position = new Vector3Int(col, row, 0);
-            this.Tilemap.SetTile(position, null);
+            Tilemap.SetTile(position, null);
         }
 
         while (row < bounds.yMax)
@@ -166,15 +166,13 @@ public class Board : MonoBehaviour
             for (int col = bounds.xMin; col < bounds.xMax; col++)
             {
                 Vector3Int position = new Vector3Int(col, row + 1, 0);
-                TileBase above = this.Tilemap.GetTile(position);
+                TileBase above = Tilemap.GetTile(position);
 
                 position = new Vector3Int(col, row, 0);
-                this.Tilemap.SetTile(position, above);
+                Tilemap.SetTile(position, above);
             }
 
             row++;
         }
     }
-
-
 }
