@@ -7,9 +7,7 @@ public class Piece : MonoBehaviour
     public Vector3Int Position { get; private set; }
 
     public int RotationIndex { get; private set; }
-    //public float GravityTimer { get; private set; } // time frame after which move block one block down
-    //public float GravityTimerLeft { get; private set; }
-    
+
     public float stepDelay = 1f;
     public float moveDelay = 0.1f;
     public float lockDelay = 0.5f;
@@ -46,17 +44,7 @@ public class Piece : MonoBehaviour
 
         // Get the game inputs from the player and move the piece
         HandleRotationInputs();
-
-        // automatically move block one square down after set amount of time
-        //if (GravityTimerLeft <= .0f)
-        //{
-        //    Move(Vector2Int.down);
-        //    GravityTimerLeft = GravityTimer;
-        //}
-
-        //GravityTimerLeft -= Time.deltaTime;
-
-
+        
         // Allow the player to hold movement keys but only after a move delay
         // so it does not move too fast
         if (Time.time > _moveTime)
@@ -167,14 +155,14 @@ public class Piece : MonoBehaviour
     // SRS rotation system (Super Rotation System)
     private void Rotate(int direction)
     {
-        //int oldRotationIndex = RotationIndex;
+        int oldRotationIndex = RotationIndex;
         RotationIndex = Wrap(RotationIndex + direction, 0, 4);
 
         ApplyRotationMatrix(direction);
 
-        // if (TestWallKicks(RotationIndex, direction)) return;
-        // RotationIndex = oldRotationIndex;
-        // ApplyRotationMatrix(-direction);
+        if (TestWallKicks(RotationIndex, direction)) return;
+        RotationIndex = oldRotationIndex;
+        ApplyRotationMatrix(-direction);
     }
 
     private void ApplyRotationMatrix(int direction)
