@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class Piece : MonoBehaviour
 {
     public Board Board { get; private set; }
@@ -130,6 +129,7 @@ public class Piece : MonoBehaviour
 
     private bool Move(Vector2Int direction)
     {
+        
         Vector3Int newPosition = Position;
         newPosition.x += direction.x;
         newPosition.y += direction.y;
@@ -142,6 +142,7 @@ public class Piece : MonoBehaviour
             _moveTime = Time.time + moveDelay;
             _lockTime = 0f; // reset
         }
+       
 
         return isValidPosition;
     }

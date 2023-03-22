@@ -1,8 +1,11 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
+
 
 public class Board : MonoBehaviour
 {
+    private bool firstRun = true;
     // The Tilemap component of the child object
     public Tilemap Tilemap { get; private set; }
 
@@ -57,6 +60,7 @@ public class Board : MonoBehaviour
     /// </summary>
     public void SpawnRandomPiece()
     {
+        CheckGameOver();
         // Randomly choose a piece
         int randomIndex = Random.Range(0, Tetrominoes.Length);
         TetrominoData data = Tetrominoes[randomIndex];
@@ -66,6 +70,8 @@ public class Board : MonoBehaviour
 
         // Set the piece on the board
         Set(CurrentPiece);
+
+        
     }
 
     /// <summary>
@@ -175,6 +181,33 @@ public class Board : MonoBehaviour
             row++;
         }
     }
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+    public void CheckGameOver()
+    {
+        RectInt bounds = this.Bounds;
+        int row = bounds.yMax;
+        for (int col = bounds.xMin; col < bounds.xMax; col++)
+        {
+            Vector3Int position = new Vector3Int(col, row, 1);
+            if (this.Tilemap.HasTile(SpawnPosition))
+            {
+                return;
+            }
 
+            else if (this.Tilemap.HasTile(position))
+            {
+                LoadScene("GameOver");
+            }
 
+            
+            
+
+        }
+       // LoadScene("GameOver");
+
+    }
 }
+
