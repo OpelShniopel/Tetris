@@ -192,22 +192,25 @@ public class Board : MonoBehaviour
     
     public bool CheckGameOver()
     {
-        RectInt boardBounds = Bounds;
-        int spawnRow = SpawnPosition.y;
-        bool isGameOver = false;
+        RectInt boardBounds = Bounds;   // Get the boundaries of the board.
+        int spawnRow = SpawnPosition.y; // Get the row index where the pieces spawn.
+        bool isGameOver = false;        // Flag to determine if the game is over or not.
         
+        // Iterate through each column in the spawn row.
         for (int columnIndex = boardBounds.xMin; columnIndex < boardBounds.xMax; columnIndex++)
         {
+            // Get the tile position at the spawn row and current column.
             Vector3Int tilePosition = new Vector3Int(columnIndex, spawnRow, 0);
 
+            // If there's no tile at the tile position, skip to the next iteration.
             if (!Tilemap.HasTile(tilePosition)) continue;
-            GameOver();
+            GameOver(); // Call the GameOver method to end the game.
                 
-            isGameOver = true;
+            isGameOver = true; // Set the isGameOver flag to true since a tile is present in the spawn row.
             break;
         }
         
-        return isGameOver;
+        return isGameOver; // Return the value of isGameOver.
     }
     
     private void GameOver()
