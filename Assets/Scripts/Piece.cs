@@ -1,4 +1,5 @@
 using UnityEngine;
+
 public class Piece : MonoBehaviour
 {
     public Board Board { get; private set; }
@@ -8,9 +9,9 @@ public class Piece : MonoBehaviour
 
     public int RotationIndex { get; private set; }
 
-    public float stepDelay = 1f;
-    public float moveDelay = 0.1f;
-    public float lockDelay = 0.5f;
+    [field: SerializeField] public float StepDelay { get; set; } = 1f;
+    [field: SerializeField] public float MoveDelay { get; set; } = 0.1f;
+    [field: SerializeField] public float LockDelay { get; set; } = 0.5f;
 
     private float _stepTime;
     private float _moveTime;
@@ -23,8 +24,8 @@ public class Piece : MonoBehaviour
         Position = position;
         RotationIndex = 0;
 
-        _stepTime = Time.time + stepDelay;
-        _moveTime = Time.time + moveDelay;
+        _stepTime = Time.time + StepDelay;
+        _moveTime = Time.time + MoveDelay;
         _lockTime = 0f;
 
         // Initialize the cells array if it is null
@@ -67,7 +68,13 @@ public class Piece : MonoBehaviour
         if (Input.GetKey(KeyCode.S) && Move(Vector2Int.down))
         {
             // Update the step time to prevent double movement
-            _stepTime = Time.time + stepDelay;
+            _stepTime = Time.time + StepDelay;
+        }
+        
+        // Hard drop the piece
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            HardDrop();
         }
 
         // Left/right movement
@@ -83,13 +90,13 @@ public class Piece : MonoBehaviour
 
     private void Step()
     {
-        _stepTime = Time.time + stepDelay;
+        _stepTime = Time.time + StepDelay;
 
         // Step down to the next row
         Move(Vector2Int.down);
 
         // Once the piece has been inactive for too long it becomes locked
-        if (_lockTime >= lockDelay)
+        if (_lockTime >= LockDelay)
         {
             Lock();
         }
@@ -97,12 +104,6 @@ public class Piece : MonoBehaviour
 
     private void HandleRotationInputs()
     {
-        // Hard drop the piece
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            HardDrop();
-        }
-
         // Rotate the piece to the left
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -127,8 +128,8 @@ public class Piece : MonoBehaviour
         if (isValidPosition)
         {
             Position = newPosition;
-            _moveTime = Time.time + moveDelay;
-            _lockTime = 0f; // reset
+            _moveTime = Time.time + MoveDelay;
+            _lockTime = 0f; // Reset
         }
        
 
@@ -149,7 +150,11 @@ public class Piece : MonoBehaviour
     {
         Board.Set(this);
         Board.ClearLines();
-        Board.SpawnRandomPiece();
+        
+        if (!Board.CheckGameOver())
+        {
+            Board.SpawnRandomPiece();
+        }
     }
 
     // SRS rotation system (Super Rotation System)

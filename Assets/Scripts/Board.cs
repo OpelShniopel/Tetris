@@ -2,10 +2,8 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 
-
 public class Board : MonoBehaviour
 {
-    private bool firstRun = true;
     // The Tilemap component of the child object
     public Tilemap Tilemap { get; private set; }
 
@@ -20,6 +18,10 @@ public class Board : MonoBehaviour
 
     // The size of the board
     [field: SerializeField] public Vector2Int BoardSize { get; set; }
+    
+    // TODO:
+    public ScoreManager ScoreManager { get; private set; }
+    
 
     public RectInt Bounds
     {
@@ -60,7 +62,6 @@ public class Board : MonoBehaviour
     /// </summary>
     public void SpawnRandomPiece()
     {
-        CheckGameOver();
         // Randomly choose a piece
         int randomIndex = Random.Range(0, Tetrominoes.Length);
         TetrominoData data = Tetrominoes[randomIndex];
@@ -70,8 +71,6 @@ public class Board : MonoBehaviour
 
         // Set the piece on the board
         Set(CurrentPiece);
-
-        
     }
 
     /// <summary>
@@ -126,30 +125,39 @@ public class Board : MonoBehaviour
 
     public void ClearLines()
     {
-        RectInt bounds = this.Bounds;
+        RectInt bounds = Bounds;
         int row = bounds.yMin;
+        int linesCleared = 0;
+
         while (row < bounds.yMax)
         {
             if (IsLineFull(row))
             {
                 LineClear(row);
+                linesCleared++;
             }
             else
             {
                 row++;
             }
         }
+        
+        // TODO: Updates current score if lines are cleared
+        // if (linesCleared > 0)
+        // {
+        //     ScoreManager.AddScore(linesCleared);
+        // }
     }
 
     private bool IsLineFull(int row)
     {
-        RectInt bounds = this.Bounds;
+        RectInt boardBounds = Bounds;
 
-        for (int col = bounds.xMin; col < bounds.xMax; col++)
+        for (int columnIndex = boardBounds.xMin; columnIndex < boardBounds.xMax; columnIndex++)
         {
-            Vector3Int position = new Vector3Int(col, row, 0);
+            Vector3Int tilePosition = new Vector3Int(columnIndex, row, 0);
 
-            if (!this.Tilemap.HasTile(position))
+            if (!Tilemap.HasTile(tilePosition))
             {
                 return false;
             }
@@ -159,12 +167,12 @@ public class Board : MonoBehaviour
 
     public void LineClear(int row)
     {
-        RectInt bounds = this.Bounds;
+        RectInt bounds = Bounds;
 
         for (int col = bounds.xMin; col < bounds.xMax; col++)
         {
             Vector3Int position = new Vector3Int(col, row, 0);
-            this.Tilemap.SetTile(position, null);
+            Tilemap.SetTile(position, null);
         }
 
         while (row < bounds.yMax)
@@ -175,39 +183,37 @@ public class Board : MonoBehaviour
                 TileBase above = this.Tilemap.GetTile(position);
 
                 position = new Vector3Int(col, row, 0);
-                this.Tilemap.SetTile(position, above);
+                Tilemap.SetTile(position, above);
             }
 
             row++;
         }
     }
-    public void LoadScene(string sceneName)
+    
+    public bool CheckGameOver()
     {
-        SceneManager.LoadScene(sceneName);
-    }
-    public void CheckGameOver()
-    {
-        RectInt bounds = this.Bounds;
-        int row = bounds.yMax;
-        for (int col = bounds.xMin; col < bounds.xMax; col++)
+        RectInt boardBounds = Bounds;
+        int spawnRow = SpawnPosition.y;
+        bool isGameOver = false;
+        
+        for (int columnIndex = boardBounds.xMin; columnIndex < boardBounds.xMax; columnIndex++)
         {
-            Vector3Int position = new Vector3Int(col, row, 1);
-            if (this.Tilemap.HasTile(SpawnPosition))
-            {
-                return;
-            }
+            Vector3Int tilePosition = new Vector3Int(columnIndex, spawnRow, 0);
 
-            else if (this.Tilemap.HasTile(position))
-            {
-                LoadScene("GameOver");
-            }
-
-            
-            
-
+            if (!Tilemap.HasTile(tilePosition)) continue;
+            GameOver();
+                
+            isGameOver = true;
+            break;
         }
-       // LoadScene("GameOver");
-
+        
+        return isGameOver;
+    }
+    
+    private void GameOver()
+    {
+        // Load the Game Over scene
+        SceneManager.LoadScene("GameOver");
     }
 }
 
