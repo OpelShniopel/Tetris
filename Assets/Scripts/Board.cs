@@ -18,6 +18,8 @@ public class Board : MonoBehaviour
 
     // The size of the board
     [field: SerializeField] public Vector2Int BoardSize { get; set; }
+
+
     
     // TODO:
     public ScoreManager ScoreManager { get; private set; }
@@ -52,41 +54,20 @@ public class Board : MonoBehaviour
         }
     }
 
-<<<<<<< Updated upstream
-    private void Start()
-    {
-        SpawnRandomPiece();
-=======
-    public void Life()
-    {
-        heartSystem = new HeartSystem[3];
+    //public void Life()
+    //{
+    //    heartSystem = new HeartSystem[3];
 
-        for (int i = 0; i < 3; i++)
-        {
-            heartSystem[i] = new HeartSystem(this);
+    //    for (int i = 0; i < 3; i++)
+    //    {
+    //        heartSystem[i] = new HeartSystem(this);
 
-        }
+    //    }
        
-        SpawnRandomPiece();
+    //    SpawnRandomPiece();
 
 
-    }
-    private void Endless()
-    {
-        if (CheckGameOver())
-        {
-            RectInt bounds = Bounds;
-            int row = bounds.yMin;
-
-            while (row <= bounds.yMax)
-            {             
-                LineClear(row);
-                                       
-            }
-        }
-
-    }
-
+    //}
     private void Start()
     {
         Scene currentScene = SceneManager.GetActiveScene();
@@ -94,7 +75,7 @@ public class Board : MonoBehaviour
 
         if (sceneName == "LifeTetris")
         {
-            Life();
+            //Life();
             SpawnRandomPiece();
 
         }
@@ -110,7 +91,6 @@ public class Board : MonoBehaviour
 
         }
         
->>>>>>> Stashed changes
     }
 
     /// <summary>
@@ -252,10 +232,8 @@ public class Board : MonoBehaviour
         RectInt boardBounds = Bounds;   // Get the boundaries of the board.
         int spawnRow = SpawnPosition.y; // Get the row index where the pieces spawn.
         bool isGameOver = false;        // Flag to determine if the game is over or not.
-<<<<<<< Updated upstream
         
         // Iterate through each column in the spawn row.
-=======
 
         Scene currentScene = SceneManager.GetActiveScene();
         string sceneName = currentScene.name;
@@ -287,7 +265,6 @@ public class Board : MonoBehaviour
             
         }
         //if (sceneName == "Tetris")
->>>>>>> Stashed changes
         for (int columnIndex = boardBounds.xMin; columnIndex < boardBounds.xMax; columnIndex++)
         {
             // Get the tile position at the spawn row and current column.
@@ -301,8 +278,6 @@ public class Board : MonoBehaviour
             isGameOver = true; // Set the isGameOver flag to true since a tile is present in the spawn row.
             break;
         }
-<<<<<<< Updated upstream
-=======
 
         //if (isGameOver && heartSystem.Length > 0)
         //{
@@ -316,7 +291,6 @@ public class Board : MonoBehaviour
 
         //}
 
->>>>>>> Stashed changes
         
 
 
