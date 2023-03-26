@@ -52,9 +52,65 @@ public class Board : MonoBehaviour
         }
     }
 
+<<<<<<< Updated upstream
     private void Start()
     {
         SpawnRandomPiece();
+=======
+    public void Life()
+    {
+        heartSystem = new HeartSystem[3];
+
+        for (int i = 0; i < 3; i++)
+        {
+            heartSystem[i] = new HeartSystem(this);
+
+        }
+       
+        SpawnRandomPiece();
+
+
+    }
+    private void Endless()
+    {
+        if (CheckGameOver())
+        {
+            RectInt bounds = Bounds;
+            int row = bounds.yMin;
+
+            while (row <= bounds.yMax)
+            {             
+                LineClear(row);
+                                       
+            }
+        }
+
+    }
+
+    private void Start()
+    {
+        Scene currentScene = SceneManager.GetActiveScene();
+        string sceneName = currentScene.name;
+
+        if (sceneName == "LifeTetris")
+        {
+            Life();
+            SpawnRandomPiece();
+
+        }
+        if (sceneName == "EndlessTetris")
+        {
+            //Endless();
+            SpawnRandomPiece();
+
+        }
+        if (sceneName == "Tetris")
+        {
+            SpawnRandomPiece();
+
+        }
+        
+>>>>>>> Stashed changes
     }
 
     /// <summary>
@@ -62,6 +118,7 @@ public class Board : MonoBehaviour
     /// </summary>
     public void SpawnRandomPiece()
     {
+        
         // Randomly choose a piece
         int randomIndex = Random.Range(0, Tetrominoes.Length);
         TetrominoData data = Tetrominoes[randomIndex];
@@ -195,21 +252,74 @@ public class Board : MonoBehaviour
         RectInt boardBounds = Bounds;   // Get the boundaries of the board.
         int spawnRow = SpawnPosition.y; // Get the row index where the pieces spawn.
         bool isGameOver = false;        // Flag to determine if the game is over or not.
+<<<<<<< Updated upstream
         
         // Iterate through each column in the spawn row.
+=======
+
+        Scene currentScene = SceneManager.GetActiveScene();
+        string sceneName = currentScene.name;
+
+
+
+        if (sceneName == "EndlessTetris")
+        {
+            isGameOver = false;
+            // Iterate through each column in the spawn row.
+            for (int columnIndex = boardBounds.xMin; columnIndex <= boardBounds.xMax; columnIndex++)
+            {
+                // Get the tile position at the spawn row and current column.
+                Vector3Int tilePosition = new Vector3Int(columnIndex, spawnRow, 0);
+
+
+                // If there's no tile at the tile position, skip to the next iteration.
+                if (!Tilemap.HasTile(tilePosition)) continue;
+                else
+                {
+                    RectInt bounds = Bounds;
+                    for (int row = bounds.yMin; row <= bounds.yMax; row++) 
+                    {
+                        LineClear(row);
+                        
+                    }
+                }             
+            }
+            
+        }
+        //if (sceneName == "Tetris")
+>>>>>>> Stashed changes
         for (int columnIndex = boardBounds.xMin; columnIndex < boardBounds.xMax; columnIndex++)
         {
             // Get the tile position at the spawn row and current column.
             Vector3Int tilePosition = new Vector3Int(columnIndex, spawnRow, 0);
 
+
             // If there's no tile at the tile position, skip to the next iteration.
             if (!Tilemap.HasTile(tilePosition)) continue;
             GameOver(); // Call the GameOver method to end the game.
-                
+
             isGameOver = true; // Set the isGameOver flag to true since a tile is present in the spawn row.
             break;
         }
+<<<<<<< Updated upstream
+=======
+
+        //if (isGameOver && heartSystem.Length > 0)
+        //{
+        //    heartSystem = new HeartSystem[heartSystem.Length - 1];
+        //    for (int i = 0; i < heartSystem.Length; i++)
+        //    {
+        //        heartSystem[i] = new HeartSystem(this);
+        //    }
+        //    return false;
+            
+
+        //}
+
+>>>>>>> Stashed changes
         
+
+
         return isGameOver; // Return the value of isGameOver.
     }
     
