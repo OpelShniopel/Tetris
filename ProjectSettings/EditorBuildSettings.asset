@@ -14,4 +14,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameOver.unity
     guid: 5dd794ced70491b46ac3d9b4c180f3f8
+  - enabled: 1
+    path: Assets/Scenes/EndlessTetris.unity
+    guid: c10f246cd365fed45a05914d88b073e4
+  - enabled: 1
+    path: Assets/Scenes/SelectModes.unity
+    guid: 87cb3a1b7142a14419d3b5184de4f78b
+  - enabled: 1
+    path: Assets/Scenes/LifeTetris.unity
+    guid: a32895197278a454286e46b4eaccdce7
   m_configObjects: {}
