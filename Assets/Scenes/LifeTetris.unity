@@ -700,7 +700,7 @@ GameObject:
   - component: {fileID: 1004378256}
   - component: {fileID: 1004378255}
   m_Layer: 5
-  m_Name: Mygtukas
+  m_Name: Elementai
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

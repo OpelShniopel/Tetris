@@ -18,6 +18,8 @@ public class Board : MonoBehaviour
 
     // The size of the board
     [field: SerializeField] public Vector2Int BoardSize { get; set; }
+
+    public HeartSystem[] heartSystem { get; set; }
     
     // TODO:
     public ScoreManager ScoreManager { get; private set; }
@@ -52,11 +54,47 @@ public class Board : MonoBehaviour
         }
     }
 
-    private void Start()
+    public void Life()
     {
+        heartSystem = new HeartSystem[3];
+
+        for (int i = 0; i < 3; i++)
+        {
+            heartSystem[i] = new HeartSystem(this);
+
+        }
+       
         SpawnRandomPiece();
+
+
+    }
+    private void Endless()
+    {
+
     }
 
+    private void Start()
+    {
+        Scene currentScene = SceneManager.GetActiveScene();
+        string sceneName = currentScene.name;
+
+        if (sceneName == "LifeTetris")
+        {
+            Life();
+
+        }
+        if (sceneName == "EndlessTetris")
+        {
+            Endless();
+
+        }
+        if (sceneName == "Tetris")
+        {
+            SpawnRandomPiece();
+
+        }
+        
+    }
     /// <summary>
     /// Spawns a random tetromino piece
     /// </summary>
@@ -195,6 +233,8 @@ public class Board : MonoBehaviour
         RectInt boardBounds = Bounds;   // Get the boundaries of the board.
         int spawnRow = SpawnPosition.y; // Get the row index where the pieces spawn.
         bool isGameOver = false;        // Flag to determine if the game is over or not.
+
+        
         
         // Iterate through each column in the spawn row.
         for (int columnIndex = boardBounds.xMin; columnIndex < boardBounds.xMax; columnIndex++)
@@ -209,11 +249,23 @@ public class Board : MonoBehaviour
             isGameOver = true; // Set the isGameOver flag to true since a tile is present in the spawn row.
             break;
         }
+
+        if (isGameOver && heartSystem.Length > 0)
+        {
+            heartSystem = new HeartSystem[heartSystem.Length - 1];
+            for (int i = 0; i < heartSystem.Length; i++)
+            {
+                heartSystem[i] = new HeartSystem(this);
+            }
+            return false;
+            
+
+        }
         
         return isGameOver; // Return the value of isGameOver.
     }
     
-    private void GameOver()
+    public void GameOver()
     {
         // Load the Game Over scene
         SceneManager.LoadScene("GameOver");
