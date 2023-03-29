@@ -1064,7 +1064,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2865b0c408e44e0489e646f79d45678d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tile: {fileID: 11400000, guid: 579ffa2c2c064d245a3cf5016522875d, type: 2}
+  tile: {fileID: 11400000, guid: 4849f7f38ea357148a9c84a4a85ab1f3, type: 2}
   board: {fileID: 693481335}
   trackingPiece: {fileID: 693481338}
 --- !u!1 &1812480670
