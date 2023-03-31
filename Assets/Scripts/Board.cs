@@ -19,7 +19,7 @@ public class Board : MonoBehaviour
     // The size of the board
     [field: SerializeField] public Vector2Int BoardSize { get; set; }
 
-    public HeartSystem[] heartSystem { get; set; }
+    [field: SerializeField] public HealthBar health { get; set; }
     
     // TODO:
     public ScoreManager ScoreManager { get; private set; }
@@ -48,6 +48,7 @@ public class Board : MonoBehaviour
 
     private void InitializeTetrominoes()
     {
+
         for (int i = 0; i < Tetrominoes.Length; i++)
         {
             Tetrominoes[i].Initialize();
@@ -55,18 +56,8 @@ public class Board : MonoBehaviour
     }
 
     public void Life()
-    {
-        heartSystem = new HeartSystem[3];
-
-        for (int i = 0; i < 3; i++)
-        {
-            heartSystem[i] = new HeartSystem(this);
-
-        }
-       
+    {   
         SpawnRandomPiece();
-
-
     }
     private void Endless()
     {
@@ -244,23 +235,19 @@ public class Board : MonoBehaviour
 
             // If there's no tile at the tile position, skip to the next iteration.
             if (!Tilemap.HasTile(tilePosition)) continue;
-            GameOver(); // Call the GameOver method to end the game.
-                
+            //GameOver(); // Call the GameOver method to end the game.
+            
             isGameOver = true; // Set the isGameOver flag to true since a tile is present in the spawn row.
+            
             break;
         }
 
-        if (isGameOver && heartSystem.Length > 0)
+        if(isGameOver && SceneManager.GetActiveScene().name == "LifeTetris")
         {
-            heartSystem = new HeartSystem[heartSystem.Length - 1];
-            for (int i = 0; i < heartSystem.Length; i++)
-            {
-                heartSystem[i] = new HeartSystem(this);
-            }
-            return false;
-            
-
-        }
+            Tilemap.ClearAllTiles();
+            ClearLines2();
+            return health.Damage();
+        }    
         
         return isGameOver; // Return the value of isGameOver.
     }
@@ -270,5 +257,26 @@ public class Board : MonoBehaviour
         // Load the Game Over scene
         SceneManager.LoadScene("GameOver");
     }
+
+    public void ClearLines2()
+    {
+        RectInt bounds = Bounds;
+        int row = bounds.yMin;
+
+        while (row < bounds.yMax)
+        {
+            LineClear(row);
+        }
+        
+        // TODO: Updates current score if lines are cleared
+        // if (linesCleared > 0)
+        // {
+        //     ScoreManager.AddScore(linesCleared);
+        // }
+    }
 }
+
+
+
+
 
