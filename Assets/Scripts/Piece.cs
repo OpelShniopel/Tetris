@@ -140,7 +140,7 @@ public class Piece : MonoBehaviour
     {
         while (Move(Vector2Int.down))
         {
-            // Loop until the piece can't move down anymore
+            // Loop until the piece cannot move down anymore
         }
 
         Lock();
