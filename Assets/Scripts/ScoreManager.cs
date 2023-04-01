@@ -16,7 +16,7 @@ public class ScoreManager : MonoBehaviour
         LinesCleared += linesCleared;
         Level = LinesCleared / 10;
 
-        // For level system
+        // For level system (kitam sprintui)
         // int points = linesCleared switch
         // {
         //     1 => 40 * (Level + 1),
@@ -37,7 +37,7 @@ public class ScoreManager : MonoBehaviour
         Score += points;
         
         UpdateScoreText();
-        UpdateLinesClearedText();
+        // UpdateLinesClearedText();
         UpdateLevelText();
     }
     
@@ -49,13 +49,14 @@ public class ScoreManager : MonoBehaviour
         }
     }
     
-    private void UpdateLinesClearedText()
-    {
-        if (linesClearedText)
-        {
-            linesClearedText.text = $"Lines Cleared: {LinesCleared}";
-        }
-    }
+    // Kitam sprintui
+    // private void UpdateLinesClearedText()
+    // {
+    //     if (linesClearedText)
+    //     {
+    //         linesClearedText.text = $"Lines Cleared: {LinesCleared}";
+    //     }
+    // }
     
     private void UpdateLevelText()
     {
@@ -72,7 +73,7 @@ public class ScoreManager : MonoBehaviour
         return Mathf.Max(1f - speedIncrease, minStepDelay);
     }
     
-    // Speed increases every 10 lines cleared
+    // Speed increases every 10 lines cleared (kitam sprintui)
     // public float GetUpdatedStepDelay()
     // {
     //     int level = LinesCleared / 10; // Change level every 10 lines cleared
