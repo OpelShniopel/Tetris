@@ -13,18 +13,14 @@ public class Board : MonoBehaviour
     // The tetromino data for each tetromino
     [field: SerializeField] public TetrominoData[] Tetrominoes { get; set; }
 
-    // The position where the tetrominoes will spawn
-    [field: SerializeField] public Vector3Int SpawnPosition { get; set; }
+    // The position where the tetrominoes will spawn. Default is (-1, 8, 0).
+    [field: SerializeField] public Vector3Int SpawnPosition { get; set; } = new(-1, 8, 0);
 
-    // The size of the board
-    [field: SerializeField] public Vector2Int BoardSize { get; set; }
-
-
+    // The size of the board. Default is 10x20.
+    [field: SerializeField] public Vector2Int BoardSize { get; set; } = new(10, 20);
     
-    // TODO:
-    public ScoreManager ScoreManager { get; private set; }
+    [field: SerializeField] public ScoreManager ScoreManager { get; set; }
     
-
     public RectInt Bounds
     {
         get
@@ -170,8 +166,8 @@ public class Board : MonoBehaviour
         {
             if (IsLineFull(row))
             {
-                LineClear(row);
                 linesCleared++;
+                LineClear(row);
             }
             else
             {
@@ -179,11 +175,10 @@ public class Board : MonoBehaviour
             }
         }
         
-        // TODO: Updates current score if lines are cleared
-        // if (linesCleared > 0)
-        // {
-        //     ScoreManager.AddScore(linesCleared);
-        // }
+        if (linesCleared > 0)
+        {
+            ScoreManager.AddScore(linesCleared);
+        }
     }
 
     private bool IsLineFull(int row)
@@ -217,7 +212,7 @@ public class Board : MonoBehaviour
             for (int col = bounds.xMin; col < bounds.xMax; col++)
             {
                 Vector3Int position = new Vector3Int(col, row + 1, 0);
-                TileBase above = this.Tilemap.GetTile(position);
+                TileBase above = Tilemap.GetTile(position);
 
                 position = new Vector3Int(col, row, 0);
                 Tilemap.SetTile(position, above);

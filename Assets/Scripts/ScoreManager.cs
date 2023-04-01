@@ -1,10 +1,13 @@
 using UnityEngine;
+using TMPro;
 
-// TODO: Complete this class to manage the score
 public class ScoreManager : MonoBehaviour
 {
-    public int Score { get; private set; }
-    public int LinesCleared { get; private set; }
+    private int Score { get; set; }
+    private int LinesCleared { get; set; }
+    
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI linesClearedText;
     
     public void AddScore(int linesCleared)
     {
@@ -20,5 +23,30 @@ public class ScoreManager : MonoBehaviour
         };
 
         Score += points;
+        
+        UpdateScoreText();
+        UpdateLinesClearedText();
+    }
+    
+    private void UpdateScoreText()
+    {
+        if (scoreText)
+        {
+            scoreText.text = $"Score: {Score}";
+        }
+    }
+    
+    private void UpdateLinesClearedText()
+    {
+        if (linesClearedText)
+        {
+            linesClearedText.text = $"Lines Cleared: {LinesCleared}";
+        }
+    }
+    
+    public void ResetScore()
+    {
+        Score = 0;
+        LinesCleared = 0;
     }
 }
