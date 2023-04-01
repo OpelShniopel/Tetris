@@ -600,6 +600,7 @@ MonoBehaviour:
   <StepDelay>k__BackingField: 1
   <MoveDelay>k__BackingField: 0.1
   <LockDelay>k__BackingField: 0.5
+  <ScoreManager>k__BackingField: {fileID: 466258906}
 --- !u!1 &999907670
 GameObject:
   m_ObjectHideFlags: 0

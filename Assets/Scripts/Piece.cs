@@ -12,6 +12,8 @@ public class Piece : MonoBehaviour
     [field: SerializeField] public float StepDelay { get; set; } = 1f;
     [field: SerializeField] public float MoveDelay { get; set; } = 0.1f;
     [field: SerializeField] public float LockDelay { get; set; } = 0.5f;
+    
+    [field: SerializeField] public ScoreManager ScoreManager { get; set; }
 
     private float _stepTime;
     private float _moveTime;
@@ -90,7 +92,8 @@ public class Piece : MonoBehaviour
 
     private void Step()
     {
-        _stepTime = Time.time + StepDelay;
+        //_stepTime = Time.time + StepDelay;
+        _stepTime = Time.time + ScoreManager.GetUpdatedStepDelay();
 
         // Step down to the next row
         Move(Vector2Int.down);

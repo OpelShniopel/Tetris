@@ -44,6 +44,13 @@ public class ScoreManager : MonoBehaviour
         }
     }
     
+    public float GetUpdatedStepDelay()
+    {
+        float speedIncrease = 0.10f * LinesCleared;
+        float minStepDelay = 0.05f;
+        return Mathf.Max(1f - speedIncrease, minStepDelay);
+    }
+    
     public void ResetScore()
     {
         Score = 0;
