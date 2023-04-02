@@ -3,60 +3,60 @@ using UnityEngine.Tilemaps;
 
 public class GhostPiece : MonoBehaviour
 {
-    public Tile tile;
-    public Board board;
-    public Piece trackingPiece;
+    [field: SerializeField] public Tile GhostTile { get; set; }
+    [field: SerializeField] public Board GameBoard { get; set; }
+    [field: SerializeField] public Piece ActivePiece { get; set; }
 
-    public Tilemap tilemap { get; private set; }
-    public Vector3Int[] cells { get; private set; }
-    public Vector3Int position { get; private set; }
+    public Tilemap GhostTilemap { get; private set; }
+    public Vector3Int[] GhostCells { get; private set; }
+    public Vector3Int GhostPosition { get; private set; }
 
     private void Awake()
     {
-        this.tilemap = GetComponentInChildren<Tilemap>();
-        this.cells = new Vector3Int[4];
+        GhostTilemap = GetComponentInChildren<Tilemap>();
+        GhostCells = new Vector3Int[4];
     }
 
     private void LateUpdate()
     {
-        Clear();
-        Copy();
-        Drop();
-        Set();
+        ClearGhost();
+        CopyActivePiece();
+        DropGhost();
+        SetGhost();
     }
 
-    private void Clear()
+    private void ClearGhost()
     {
-        for (int i = 0; i < this.cells.Length; i++)
+        for (int i = 0; i < GhostCells.Length; i++)
         {
-            Vector3Int tilePosition = this.cells[i] + this.position;
-            this.tilemap.SetTile(tilePosition, null);
+            Vector3Int tilePosition = GhostCells[i] + GhostPosition;
+            GhostTilemap.SetTile(tilePosition, null);
         }
     }
 
-    private void Copy()
+    private void CopyActivePiece()
     {
-        for (int i = 0; i < this.cells.Length; i++)
+        for (int i = 0; i < GhostCells.Length; i++)
         {
-            this.cells[i] = this.trackingPiece.Cells[i];
+            GhostCells[i] = ActivePiece.Cells[i];
         }
     }
 
-    private void Drop()
+    private void DropGhost()
     {
-        Vector3Int position = this.trackingPiece.Position;
+        Vector3Int position = ActivePiece.Position;
 
         int current = position.y;
-        int bottom = -this.board.BoardSize.y / 2 - 1;
+        int bottom = -GameBoard.BoardSize.y / 2 - 1;
 
-        this.board.Clear(this.trackingPiece);
+        GameBoard.Clear(ActivePiece);
 
         for (int row = current; row >= bottom; row--)
         {
             position.y = row;
-            if (this.board.IsValidPosition(this.trackingPiece, position))
+            if (GameBoard.IsValidPosition(ActivePiece, position))
             {
-                this.position = position;
+                GhostPosition = position;
             }
             else
             {
@@ -64,15 +64,15 @@ public class GhostPiece : MonoBehaviour
             }
         }
 
-        this.board.Set(this.trackingPiece);
+        GameBoard.Set(ActivePiece);
     }
 
-    private void Set()
+    private void SetGhost()
     {
-        for (int i = 0; i < this.cells.Length; i++)
+        for (int i = 0; i < GhostCells.Length; i++)
         {
-            Vector3Int tilePosition = this.cells[i] + this.position;
-            this.tilemap.SetTile(tilePosition, this.tile);
+            Vector3Int tilePosition = GhostCells[i] + GhostPosition;
+            GhostTilemap.SetTile(tilePosition, GhostTile);
         }
     }
 }
