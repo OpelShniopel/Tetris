@@ -44,6 +44,7 @@ public class Board : MonoBehaviour
 
     private void InitializeTetrominoes()
     {
+
         for (int i = 0; i < Tetrominoes.Length; i++)
         {
             Tetrominoes[i].Initialize();
@@ -88,7 +89,7 @@ public class Board : MonoBehaviour
         }
         
     }
-
+   
     /// <summary>
     /// Spawns a random tetromino piece
     /// </summary>
@@ -273,5 +274,26 @@ public class Board : MonoBehaviour
         // Load the Game Over scene
         SceneManager.LoadScene("GameOver");
     }
+
+    public void ClearLines2()
+    {
+        RectInt bounds = Bounds;
+        int row = bounds.yMin;
+
+        while (row < bounds.yMax)
+        {
+            LineClear(row);
+        }
+        
+        // TODO: Updates current score if lines are cleared
+        // if (linesCleared > 0)
+        // {
+        //     ScoreManager.AddScore(linesCleared);
+        // }
+    }
 }
+
+
+
+
 
