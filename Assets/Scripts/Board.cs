@@ -244,11 +244,13 @@ public class Board : MonoBehaviour
             if (!Tilemap.HasTile(tilePosition)) continue;
             isGameOver = true;
 
-            if (sceneName == "Life Tetris" && isGameOver)
+            if (sceneName == "LifeTetris" && isGameOver)
             {
                 ClearBoard();
                 isGameOver = false;
-                return health.Damage();            
+                health.Damage();
+                if (health.health < 1)
+                    GameOver();
             }
 
             if (isEndlessTetris && isGameOver)
