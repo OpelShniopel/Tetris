@@ -15,7 +15,7 @@ public class HeartSystem
     public HeartSystem(Board board)
     {
         this.board = board;
-        //
+
 
 
         //hearts = gameObject.GetComponent<SpriteRenderer>();
@@ -24,5 +24,5 @@ public class HeartSystem
 
     }
 
-    
+
 }

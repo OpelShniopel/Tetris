@@ -18,6 +18,8 @@ public class Board : MonoBehaviour
 
     // The size of the board. Default is 10x20.
     [field: SerializeField] public Vector2Int BoardSize { get; set; } = new(10, 20);
+
+    [field: SerializeField] public HealthBar health { get; set; }
     
     [field: SerializeField] public ScoreManager ScoreManager { get; set; }
     
@@ -51,42 +53,27 @@ public class Board : MonoBehaviour
         }
     }
 
-    //public void Life()
-    //{
-    //    heartSystem = new HeartSystem[3];
-
-    //    for (int i = 0; i < 3; i++)
-    //    {
-    //        heartSystem[i] = new HeartSystem(this);
-
-    //    }
-       
-    //    SpawnRandomPiece();
-
-
-    //}
     private void Start()
     {
         Scene currentScene = SceneManager.GetActiveScene();
         string sceneName = currentScene.name;
 
-        if (sceneName == "LifeTetris")
-        {
-            //Life();
+       // if (sceneName == "LifeTetris")
+        //{ 
             SpawnRandomPiece();
 
-        }
-        if (sceneName == "EndlessTetris")
-        {
-            //Endless();
-            SpawnRandomPiece();
+       // }
+       // if (sceneName == "EndlessTetris")
+       // {
+            
+           // SpawnRandomPiece();
 
-        }
-        if (sceneName == "Tetris")
-        {
-            SpawnRandomPiece();
+      //  }
+      //  if (sceneName == "Tetris")
+       // {
+          //  SpawnRandomPiece();
 
-        }
+       // }
         
     }
    
@@ -239,6 +226,7 @@ public class Board : MonoBehaviour
 
     public bool CheckGameOver()
     {
+        bool isGameOver = false;
         RectInt boardBounds = Bounds;   // Get the boundaries of the board.
         int spawnRow = SpawnPosition.y; // Get the row index where the pieces spawn.
 
@@ -254,19 +242,27 @@ public class Board : MonoBehaviour
 
             // If there's no tile at the tile position, skip to the next iteration.
             if (!Tilemap.HasTile(tilePosition)) continue;
+            isGameOver = true;
 
-            if (isEndlessTetris)
+            if (sceneName == "Life Tetris" && isGameOver)
+            {
+                ClearBoard();
+                isGameOver = false;
+                return health.Damage();            
+            }
+
+            if (isEndlessTetris && isGameOver)
             {
                 ClearBoard();
             }
-            else
-            {
+
+            if (sceneName == "Tetris" && isGameOver)
                 GameOver();
-                return true; // Game over since a tile is present in the spawn row.
-            }
+            
+            
         }
 
-        return false; // No game over.
+        return isGameOver; // No game over.
     }
 
     private void GameOver()
@@ -275,22 +271,10 @@ public class Board : MonoBehaviour
         SceneManager.LoadScene("GameOver");
     }
 
-    public void ClearLines2()
-    {
-        RectInt bounds = Bounds;
-        int row = bounds.yMin;
-
-        while (row < bounds.yMax)
-        {
-            LineClear(row);
-        }
+    
         
-        // TODO: Updates current score if lines are cleared
-        // if (linesCleared > 0)
-        // {
-        //     ScoreManager.AddScore(linesCleared);
-        // }
-    }
+       
+    
 }
 
 

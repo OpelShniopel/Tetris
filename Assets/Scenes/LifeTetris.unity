@@ -571,19 +571,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Tetrominoes>k__BackingField:
   - <Type>k__BackingField: 0
-    <Tile>k__BackingField: {fileID: 11400000, guid: 9bace663d3190fe4984e793fa9b4f844, type: 2}
+    <Tile>k__BackingField: {fileID: 11400000, guid: 49dc5aa86ec58974f82382656de990ed, type: 2}
   - <Type>k__BackingField: 1
-    <Tile>k__BackingField: {fileID: 11400000, guid: dfb7152eb103c264689b862ab15a3e0c, type: 2}
+    <Tile>k__BackingField: {fileID: 11400000, guid: 579ffa2c2c064d245a3cf5016522875d, type: 2}
   - <Type>k__BackingField: 2
-    <Tile>k__BackingField: {fileID: 11400000, guid: a8bad31d008cfb84a97d5a2db6b7c56c, type: 2}
+    <Tile>k__BackingField: {fileID: 11400000, guid: 9be522891f5bfb9479ad2e1208b41364, type: 2}
   - <Type>k__BackingField: 3
-    <Tile>k__BackingField: {fileID: 11400000, guid: 0d1abb9e33c9e214a969f11218c06deb, type: 2}
+    <Tile>k__BackingField: {fileID: 11400000, guid: 8e8f47aff928c504bbd144e5ae2af38f, type: 2}
   - <Type>k__BackingField: 4
-    <Tile>k__BackingField: {fileID: 11400000, guid: 25c4453fe10fe7645a9bbde839259a78, type: 2}
+    <Tile>k__BackingField: {fileID: 11400000, guid: fd657dfc522a9854e9f73c1dd15b6814, type: 2}
   - <Type>k__BackingField: 5
-    <Tile>k__BackingField: {fileID: 11400000, guid: 2d477299160284942ab1f66f38c55b39, type: 2}
+    <Tile>k__BackingField: {fileID: 11400000, guid: bdc12add9a2c5964e93e176517a23265, type: 2}
   - <Type>k__BackingField: 6
-    <Tile>k__BackingField: {fileID: 11400000, guid: 3577ec46bc3380141bf730cb3dedb37b, type: 2}
+    <Tile>k__BackingField: {fileID: 11400000, guid: 91e5fa018322fb3448a9da8e2b6ddc0a, type: 2}
   <SpawnPosition>k__BackingField: {x: -1, y: 9, z: 0}
   <BoardSize>k__BackingField: {x: 10, y: 20}
   <health>k__BackingField: {fileID: 693481339}
@@ -873,8 +873,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 540368100}
-  - {fileID: 1943925432}
-  - {fileID: 807241391}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1326,7 +1324,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1685450941}
   - component: {fileID: 1685450940}
-  - component: {fileID: 1685450942}
   m_Layer: 0
   m_Name: Ghost
   m_TagString: Untagged
@@ -1362,21 +1359,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1685450942
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1685450939}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2865b0c408e44e0489e646f79d45678d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <GhostTile>k__BackingField: {fileID: 11400000, guid: 1bf4fd8303cfc0540a56a7cc0573e4ac, type: 2}
-  <GameBoard>k__BackingField: {fileID: 693481335}
-  <ActivePiece>k__BackingField: {fileID: 693481338}
 --- !u!1 &1812480670
 GameObject:
   m_ObjectHideFlags: 0
