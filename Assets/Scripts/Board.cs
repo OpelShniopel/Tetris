@@ -259,9 +259,9 @@ public class Board : MonoBehaviour
             }
 
             if (sceneName == "Tetris" && isGameOver)
+            {
                 GameOver();
-            
-            
+            }
         }
 
         return isGameOver; // No game over.
@@ -272,11 +272,6 @@ public class Board : MonoBehaviour
         // Load the Game Over scene
         SceneManager.LoadScene("GameOver");
     }
-
-    
-        
-       
-    
 }
 
 
