@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
@@ -20,7 +18,6 @@ public class AudioManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-
         }
         else
         {
@@ -33,7 +30,6 @@ public class AudioManager : MonoBehaviour
     {
         musicSource.clip = backgroundMusic;
         musicSource.Play();
-
     }
 
     // Update is called once per frame
