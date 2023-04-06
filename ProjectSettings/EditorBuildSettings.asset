@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MultiPlayerTetris.unity
     guid: 9fe41f5ec8e505b4d9f3911f38d7a775
+  - enabled: 1
+    path: Assets/Scenes/DifficultyScene.unity
+    guid: f1645af677c008d48a572444919629eb
   m_configObjects: {}
