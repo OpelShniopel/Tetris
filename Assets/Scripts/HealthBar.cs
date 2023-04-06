@@ -1,35 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    [SerializeField] public float health;
+    [field: SerializeField] public float Health { get; set; } = 3;
     [SerializeField] private Image fullHealthBar;
     [SerializeField] private Image currentHealthBar;
 
     public void Awake()
     {
-        fullHealthBar.fillAmount = health / 3;
+        fullHealthBar.fillAmount = Health / 3;
     }
 
-    public void Start() {
-        fullHealthBar.fillAmount = health / 3;
+    public void Start()
+    {
+        fullHealthBar.fillAmount = Health / 3;
     }
 
-    public void Update() {
+    public void Update()
+    {
         //playerHealth = GameObject.FindWithTag("Player").GetComponent<HealthController>();
-        currentHealthBar.fillAmount = health / 3;
+        currentHealthBar.fillAmount = Health / 3;
     }
 
     public bool Damage()
     {
-        health -= 1f;
-	    if(health <= 0)
-	        return true;
-        return false;
+        Health -= 1f;
+	    return Health <= 0;
     }
-
-    
 }
