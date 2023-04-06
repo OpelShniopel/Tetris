@@ -903,7 +903,7 @@ MonoBehaviour:
     <Tile>k__BackingField: {fileID: 11400000, guid: 3577ec46bc3380141bf730cb3dedb37b, type: 2}
   <SpawnPosition>k__BackingField: {x: -1, y: 9, z: 0}
   <BoardSize>k__BackingField: {x: 10, y: 21}
-  <health>k__BackingField: {fileID: 693481339}
+  <Health>k__BackingField: {fileID: 693481339}
   <ScoreManager>k__BackingField: {fileID: 497386492}
 --- !u!156049354 &693481336
 Grid:
