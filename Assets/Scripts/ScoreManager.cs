@@ -7,7 +7,7 @@ public class ScoreManager : MonoBehaviour
     public int LinesCleared { get; private set; }
     public int Level { get; private set; }
     
-    [field: SerializeField] public Difficulty DifficultyLevel { get; set; }
+    [field: SerializeField] public Difficulty DifficultyLevel { get; private set; }
     
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI linesClearedText;
@@ -67,7 +67,7 @@ public class ScoreManager : MonoBehaviour
             levelText.text = $"Level: {Level}";
         }
     }
-    
+
     // public float GetUpdatedStepDelay()
     // {
     //     float speedIncrease = 0.10f * LinesCleared;
@@ -117,5 +117,10 @@ public class ScoreManager : MonoBehaviour
         Score = 0;
         LinesCleared = 0;
         Level = 0;
+    }
+    
+    public void SetDifficultyLevel(Difficulty difficultyLevel)
+    {
+        DifficultyLevel = difficultyLevel;
     }
 }
