@@ -7,6 +7,8 @@ public class ScoreManager : MonoBehaviour
     public int LinesCleared { get; private set; }
     public int Level { get; private set; }
     
+    [field: SerializeField] public Difficulty DifficultyLevel { get; set; }
+    
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI linesClearedText;
     [SerializeField] private TextMeshProUGUI levelText;
@@ -66,11 +68,37 @@ public class ScoreManager : MonoBehaviour
         }
     }
     
+    // public float GetUpdatedStepDelay()
+    // {
+    //     float speedIncrease = 0.10f * LinesCleared;
+    //     float minStepDelay = 0.05f;
+    //     return Mathf.Max(1f - speedIncrease, minStepDelay);
+    // }
+    
     public float GetUpdatedStepDelay()
     {
-        float speedIncrease = 0.10f * LinesCleared;
+        float initialSpeed = 1f;
+        float speedIncrease = 0.05f * LinesCleared;
         float minStepDelay = 0.05f;
-        return Mathf.Max(1f - speedIncrease, minStepDelay);
+
+        // Adjust initial speed and speed increase rate based on the difficulty level
+        switch (DifficultyLevel)
+        {
+            case Difficulty.Easy:
+                initialSpeed = 1f;
+                speedIncrease = 0.05f * LinesCleared;
+                break;
+            case Difficulty.Medium:
+                initialSpeed = 0.75f;
+                speedIncrease = 0.1f * LinesCleared;
+                break;
+            case Difficulty.Hard:
+                initialSpeed = 0.5f;
+                speedIncrease = 0.15f * LinesCleared;
+                break;
+        }
+
+        return Mathf.Max(initialSpeed - speedIncrease, minStepDelay);
     }
     
     // Speed increases every 10 lines cleared (kitam sprintui)
