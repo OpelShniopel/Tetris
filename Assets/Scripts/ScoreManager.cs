@@ -1,32 +1,39 @@
+using System;
 using UnityEngine;
 using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
+    public static ScoreManager Instance { get; private set; }
+    
     public int Score { get; private set; }
     public int LinesCleared { get; private set; }
     public int Level { get; private set; }
-    
-    [field: SerializeField] public Difficulty DifficultyLevel { get; private set; }
-    
+
+    public Difficulty DifficultyLevel { get; set; }
+
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI linesClearedText;
     [SerializeField] private TextMeshProUGUI levelText;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     
     public void AddScore(int linesCleared)
     {
         LinesCleared += linesCleared;
         Level = LinesCleared / 10;
-
-        // For level system (kitam sprintui)
-        // int points = linesCleared switch
-        // {
-        //     1 => 40 * (Level + 1),
-        //     2 => 100 * (Level + 1),
-        //     3 => 300 * (Level + 1),
-        //     4 => 1200 * (Level + 1),
-        //     _ => 0
-        // };
+        
         int points = linesCleared switch
         {
             1 => 40,
@@ -37,44 +44,36 @@ public class ScoreManager : MonoBehaviour
         };
 
         Score += points;
-        
+
         UpdateScoreText();
-        // UpdateLinesClearedText();
+        UpdateLinesClearedText();
         UpdateLevelText();
     }
-    
+
     private void UpdateScoreText()
     {
         if (scoreText)
         {
-            scoreText.text = $"Score: {Score}";
+            scoreText.text = $"Taškai: {Score}";
         }
     }
-    
-    // Kitam sprintui
-    // private void UpdateLinesClearedText()
-    // {
-    //     if (linesClearedText)
-    //     {
-    //         linesClearedText.text = $"Lines Cleared: {LinesCleared}";
-    //     }
-    // }
-    
+
     private void UpdateLevelText()
     {
         if (levelText)
         {
-            levelText.text = $"Level: {Level}";
+            levelText.text = $"Lygis: {Level}";
+        }
+    }
+    
+    private void UpdateLinesClearedText()
+    {
+        if (linesClearedText)
+        {
+            linesClearedText.text = $"Išvalytos linijos: {LinesCleared}";
         }
     }
 
-    // public float GetUpdatedStepDelay()
-    // {
-    //     float speedIncrease = 0.10f * LinesCleared;
-    //     float minStepDelay = 0.05f;
-    //     return Mathf.Max(1f - speedIncrease, minStepDelay);
-    // }
-    
     public float GetUpdatedStepDelay()
     {
         float initialSpeed = 1f;
@@ -100,27 +99,35 @@ public class ScoreManager : MonoBehaviour
 
         return Mathf.Max(initialSpeed - speedIncrease, minStepDelay);
     }
-    
-    // Speed increases every 10 lines cleared (kitam sprintui)
-    // public float GetUpdatedStepDelay()
-    // {
-    //     int level = LinesCleared / 10; // Change level every 10 lines cleared
-    //     float speedIncreasePerLevel = 0.10f;
-    //     float speedIncrease = speedIncreasePerLevel * level;
-    //     float minStepDelay = 0.05f;
-    //
-    //     return Mathf.Max(1f - speedIncrease, minStepDelay);
-    // }
+
+    public void SetDifficultyEasy()
+    {
+        SetDifficulty(Difficulty.Easy);
+    }
+
+    public void SetDifficultyMedium()
+    {
+        SetDifficulty(Difficulty.Medium);
+    }
+
+    public void SetDifficultyHard()
+    {
+        SetDifficulty(Difficulty.Hard);
+    }
+
+    private void SetDifficulty(Difficulty newDifficulty)
+    {
+        DifficultyLevel = newDifficulty;
+    }
     
     public void ResetScore()
     {
         Score = 0;
         LinesCleared = 0;
         Level = 0;
-    }
-    
-    public void SetDifficultyLevel(Difficulty difficultyLevel)
-    {
-        DifficultyLevel = difficultyLevel;
+        
+        UpdateScoreText();
+        UpdateLinesClearedText();
+        UpdateLevelText();
     }
 }

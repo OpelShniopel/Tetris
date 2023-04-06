@@ -92,8 +92,7 @@ public class Piece : MonoBehaviour
 
     private void Step()
     {
-        //_stepTime = Time.time + StepDelay;
-        _stepTime = Time.time + ScoreManager.GetUpdatedStepDelay();
+        _stepTime = Time.time + ScoreManager.Instance.GetUpdatedStepDelay();
 
         // Step down to the next row
         Move(Vector2Int.down);
