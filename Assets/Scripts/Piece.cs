@@ -154,6 +154,7 @@ public class Piece : MonoBehaviour
         Board.Set(this);
         Board.ClearLines();
         
+        // Check if the game is over after the piece has been locked
         if (!Board.CheckGameOver())
         {
             Board.SpawnRandomPiece();
