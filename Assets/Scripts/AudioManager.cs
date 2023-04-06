@@ -2,14 +2,13 @@
 
 public class AudioManager : MonoBehaviour
 {
+    public static AudioManager instance;
 
-    [Header("----------- Garso šaltinis ------------")]
-    [SerializeField] AudioSource musicSource;
+    [Header("----------- Garso šaltinis ------------")] [SerializeField]
+    private AudioSource musicSource;
 
     [Header("----------- Garso įrašas ------------")]
     public AudioClip backgroundMusic;
-
-    public static AudioManager instance;
 
 
     private void Awake()
@@ -26,15 +25,14 @@ public class AudioManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         musicSource.clip = backgroundMusic;
         musicSource.Play();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
     }
 }

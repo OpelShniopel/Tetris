@@ -26,6 +26,6 @@ public class HealthBar : MonoBehaviour
     public bool Damage()
     {
         Health -= 1f;
-	    return Health <= 0;
+        return Health <= 0;
     }
 }

@@ -1,20 +1,18 @@
-using System;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI linesClearedText;
+    [SerializeField] private TextMeshProUGUI levelText;
     public static ScoreManager Instance { get; private set; }
-    
+
     public int Score { get; private set; }
     public int LinesCleared { get; private set; }
     public int Level { get; private set; }
 
     public Difficulty DifficultyLevel { get; set; }
-
-    [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private TextMeshProUGUI linesClearedText;
-    [SerializeField] private TextMeshProUGUI levelText;
 
     private void Awake()
     {
@@ -28,12 +26,12 @@ public class ScoreManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
     public void AddScore(int linesCleared)
     {
         LinesCleared += linesCleared;
         Level = LinesCleared / 10;
-        
+
         int points = linesCleared switch
         {
             1 => 40,
@@ -65,7 +63,7 @@ public class ScoreManager : MonoBehaviour
             levelText.text = $"Lygis: {Level}";
         }
     }
-    
+
     private void UpdateLinesClearedText()
     {
         if (linesClearedText)
@@ -119,13 +117,13 @@ public class ScoreManager : MonoBehaviour
     {
         DifficultyLevel = newDifficulty;
     }
-    
+
     public void ResetScore()
     {
         Score = 0;
         LinesCleared = 0;
         Level = 0;
-        
+
         UpdateScoreText();
         UpdateLinesClearedText();
         UpdateLevelText();

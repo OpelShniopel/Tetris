@@ -1,15 +1,9 @@
 using UnityEngine;
-using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 public class Board : MonoBehaviour
 {
-    // The Tilemap component of the child object
-    public Tilemap Tilemap { get; private set; }
-
-    // The Piece component of the child object
-    public Piece CurrentPiece { get; private set; }
-
     // The tetromino data for each tetromino
     [field: SerializeField] public TetrominoData[] Tetrominoes { get; set; }
 
@@ -20,22 +14,28 @@ public class Board : MonoBehaviour
     [field: SerializeField] public Vector2Int BoardSize { get; set; } = new(10, 20);
 
     [field: SerializeField] public HealthBar Health { get; set; }
-    
+
     [field: SerializeField] public ScoreManager ScoreManager { get; set; }
-    
+
+    // The Tilemap component of the child object
+    public Tilemap Tilemap { get; private set; }
+
+    // The Piece component of the child object
+    public Piece CurrentPiece { get; private set; }
+
     public RectInt Bounds
     {
         get
         {
             // Calculate the position of the board's bottom left corner.
-            Vector2Int position = new Vector2Int(-BoardSize.x / 2, -BoardSize.y / 2);
+            Vector2Int position = new(-BoardSize.x / 2, -BoardSize.y / 2);
             // Return a rectangle with the calculated position and the board's size.
             return new RectInt(position, BoardSize);
         }
     }
 
     /// <summary>
-    /// Awake is used to initialize any variables or game state before the game starts.
+    ///     Awake is used to initialize any variables or game state before the game starts.
     /// </summary>
     private void Awake()
     {
@@ -44,45 +44,24 @@ public class Board : MonoBehaviour
         InitializeTetrominoes(); // Initialize the tetromino data for each tetromino.
     }
 
+    private void Start()
+    {
+        SpawnRandomPiece();
+    }
+
     private void InitializeTetrominoes()
     {
-
         for (int i = 0; i < Tetrominoes.Length; i++)
         {
             Tetrominoes[i].Initialize();
         }
     }
 
-    private void Start()
-    {
-        Scene currentScene = SceneManager.GetActiveScene();
-        string sceneName = currentScene.name;
-
-       // if (sceneName == "LifeTetris")
-        //{ 
-            SpawnRandomPiece();
-
-       // }
-       // if (sceneName == "EndlessTetris")
-       // {
-            
-           // SpawnRandomPiece();
-
-      //  }
-      //  if (sceneName == "Tetris")
-       // {
-          //  SpawnRandomPiece();
-
-       // }
-        
-    }
-   
     /// <summary>
-    /// Spawns a random tetromino piece
+    ///     Spawns a random tetromino piece
     /// </summary>
     public void SpawnRandomPiece()
     {
-        
         // Randomly choose a piece
         int randomIndex = Random.Range(0, Tetrominoes.Length);
         TetrominoData data = Tetrominoes[randomIndex];
@@ -95,7 +74,7 @@ public class Board : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets the piece on the board
+    ///     Sets the piece on the board
     /// </summary>
     /// <param name="piece"></param>
     public void Set(Piece piece)
@@ -162,7 +141,7 @@ public class Board : MonoBehaviour
                 row++;
             }
         }
-        
+
         if (linesCleared > 0)
         {
             ScoreManager.AddScore(linesCleared);
@@ -175,13 +154,14 @@ public class Board : MonoBehaviour
 
         for (int columnIndex = boardBounds.xMin; columnIndex < boardBounds.xMax; columnIndex++)
         {
-            Vector3Int tilePosition = new Vector3Int(columnIndex, row, 0);
+            Vector3Int tilePosition = new(columnIndex, row, 0);
 
             if (!Tilemap.HasTile(tilePosition))
             {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -191,7 +171,7 @@ public class Board : MonoBehaviour
 
         for (int col = bounds.xMin; col < bounds.xMax; col++)
         {
-            Vector3Int position = new Vector3Int(col, row, 0);
+            Vector3Int position = new(col, row, 0);
             Tilemap.SetTile(position, null);
         }
 
@@ -199,7 +179,7 @@ public class Board : MonoBehaviour
         {
             for (int col = bounds.xMin; col < bounds.xMax; col++)
             {
-                Vector3Int position = new Vector3Int(col, row + 1, 0);
+                Vector3Int position = new(col, row + 1, 0);
                 TileBase above = Tilemap.GetTile(position);
 
                 position = new Vector3Int(col, row, 0);
@@ -209,16 +189,16 @@ public class Board : MonoBehaviour
             row++;
         }
     }
-    
+
     public void ClearBoard()
     {
         RectInt boardBounds = Bounds;
-    
+
         for (int rowIndex = boardBounds.yMin; rowIndex < boardBounds.yMax; rowIndex++)
         {
             for (int columnIndex = boardBounds.xMin; columnIndex < boardBounds.xMax; columnIndex++)
             {
-                Vector3Int position = new Vector3Int(columnIndex, rowIndex, 0);
+                Vector3Int position = new(columnIndex, rowIndex, 0);
                 Tilemap.SetTile(position, null);
             }
         }
@@ -252,16 +232,19 @@ public class Board : MonoBehaviour
 
     private bool IsLifeGameOver()
     {
-        RectInt boardBounds = Bounds;   // Get the boundaries of the board.
+        RectInt boardBounds = Bounds; // Get the boundaries of the board.
         int spawnRow = SpawnPosition.y; // Get the row index where the pieces spawn.
 
         for (int columnIndex = boardBounds.xMin; columnIndex < boardBounds.xMax; columnIndex++)
         {
             // Get the tile position at the spawn row and current column.
-            Vector3Int tilePosition = new Vector3Int(columnIndex, spawnRow, 0);
+            Vector3Int tilePosition = new(columnIndex, spawnRow, 0);
 
             // If there's no tile at the tile position, skip to the next iteration.
-            if (!Tilemap.HasTile(tilePosition)) continue;
+            if (!Tilemap.HasTile(tilePosition))
+            {
+                continue;
+            }
 
             ClearBoard(); // Clear the board of all tiles.
             Health.Damage(); // Damage the player.
@@ -274,16 +257,19 @@ public class Board : MonoBehaviour
 
     private bool IsEndlessGameOver()
     {
-        RectInt boardBounds = Bounds;   // Get the boundaries of the board.
+        RectInt boardBounds = Bounds; // Get the boundaries of the board.
         int spawnRow = SpawnPosition.y; // Get the row index where the pieces spawn.
 
         for (int columnIndex = boardBounds.xMin; columnIndex < boardBounds.xMax; columnIndex++)
         {
             // Get the tile position at the spawn row and current column.
-            Vector3Int tilePosition = new Vector3Int(columnIndex, spawnRow, 0);
+            Vector3Int tilePosition = new(columnIndex, spawnRow, 0);
 
             // If there's no tile at the tile position, skip to the next iteration.
-            if (!Tilemap.HasTile(tilePosition)) continue;
+            if (!Tilemap.HasTile(tilePosition))
+            {
+                continue;
+            }
 
             ClearBoard(); // Clear the board of all tiles.
         }
@@ -293,16 +279,19 @@ public class Board : MonoBehaviour
 
     private bool IsNormalGameOver()
     {
-        RectInt boardBounds = Bounds;   // Get the boundaries of the board.
+        RectInt boardBounds = Bounds; // Get the boundaries of the board.
         int spawnRow = SpawnPosition.y; // Get the row index where the pieces spawn.
 
         for (int columnIndex = boardBounds.xMin; columnIndex < boardBounds.xMax; columnIndex++)
         {
             // Get the tile position at the spawn row and current column.
-            Vector3Int tilePosition = new Vector3Int(columnIndex, spawnRow, 0);
+            Vector3Int tilePosition = new(columnIndex, spawnRow, 0);
 
             // If there's no tile at the tile position, skip to the next iteration.
-            if (!Tilemap.HasTile(tilePosition)) continue;
+            if (!Tilemap.HasTile(tilePosition))
+            {
+                continue;
+            }
 
             return true; // Game over.
         }
@@ -316,8 +305,3 @@ public class Board : MonoBehaviour
         SceneManager.LoadScene("GameOver");
     }
 }
-
-
-
-
-

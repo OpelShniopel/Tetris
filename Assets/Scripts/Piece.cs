@@ -2,6 +2,15 @@ using UnityEngine;
 
 public class Piece : MonoBehaviour
 {
+    [field: SerializeField] public float StepDelay { get; set; } = 1f;
+    [field: SerializeField] public float MoveDelay { get; set; } = 0.1f;
+    [field: SerializeField] public float LockDelay { get; set; } = 0.5f;
+
+    [field: SerializeField] public ScoreManager ScoreManager { get; set; }
+    private float _lockTime;
+    private float _moveTime;
+
+    private float _stepTime;
     public Board Board { get; private set; }
     public TetrominoData TetrominoData { get; private set; }
     public Vector3Int[] Cells { get; private set; }
@@ -9,15 +18,30 @@ public class Piece : MonoBehaviour
 
     public int RotationIndex { get; private set; }
 
-    [field: SerializeField] public float StepDelay { get; set; } = 1f;
-    [field: SerializeField] public float MoveDelay { get; set; } = 0.1f;
-    [field: SerializeField] public float LockDelay { get; set; } = 0.5f;
-    
-    [field: SerializeField] public ScoreManager ScoreManager { get; set; }
+    private void Update()
+    {
+        Board.Clear(this);
 
-    private float _stepTime;
-    private float _moveTime;
-    private float _lockTime;
+        _lockTime += Time.deltaTime;
+
+        // Get the game inputs from the player and move the piece
+        HandleRotationInputs();
+
+        // Allow the player to hold movement keys but only after a move delay
+        // so it does not move too fast
+        if (Time.time > _moveTime)
+        {
+            HandleMoveInputs();
+        }
+
+        // Advance the piece to the next row every x seconds
+        if (Time.time > _stepTime)
+        {
+            Step();
+        }
+
+        Board.Set(this);
+    }
 
     public void Initialize(Board board, Vector3Int position, TetrominoData tetrominoData)
     {
@@ -39,40 +63,15 @@ public class Piece : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        Board.Clear(this);
-
-        _lockTime += Time.deltaTime;
-
-        // Get the game inputs from the player and move the piece
-        HandleRotationInputs();
-        
-        // Allow the player to hold movement keys but only after a move delay
-        // so it does not move too fast
-        if (Time.time > _moveTime)
-        {
-            HandleMoveInputs();
-        }
-
-        // Advance the piece to the next row every x seconds
-        if (Time.time > _stepTime)
-        {
-            Step();
-        }
-
-        Board.Set(this);
-    }
-
     private void HandleMoveInputs()
     {
         // Soft drop movement
         if (Input.GetKey(KeyCode.S) && Move(Vector2Int.down))
-        {
             // Update the step time to prevent double movement
+        {
             _stepTime = Time.time + StepDelay;
         }
-        
+
         // Hard drop the piece
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -120,7 +119,6 @@ public class Piece : MonoBehaviour
 
     private bool Move(Vector2Int direction)
     {
-        
         Vector3Int newPosition = Position;
         newPosition.x += direction.x;
         newPosition.y += direction.y;
@@ -133,7 +131,6 @@ public class Piece : MonoBehaviour
             _moveTime = Time.time + MoveDelay;
             _lockTime = 0f; // Reset
         }
-       
 
         return isValidPosition;
     }
@@ -152,7 +149,7 @@ public class Piece : MonoBehaviour
     {
         Board.Set(this);
         Board.ClearLines();
-        
+
         // Check if the game is over after the piece has been locked
         if (!Board.CheckGameOver())
         {
@@ -168,7 +165,11 @@ public class Piece : MonoBehaviour
 
         ApplyRotationMatrix(direction);
 
-        if (TestWallKicks(RotationIndex, direction)) return;
+        if (TestWallKicks(RotationIndex, direction))
+        {
+            return;
+        }
+
         RotationIndex = oldRotationIndex;
         ApplyRotationMatrix(-direction);
     }
