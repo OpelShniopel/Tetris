@@ -245,6 +245,7 @@ public class Board : MonoBehaviour
             "LifeTetris" => IsLifeGameOver(),
             "EndlessTetris" => IsEndlessGameOver(),
             "Tetris" => IsNormalGameOver(),
+            "MultiPlayerTetris" => IsNormalGameOver(),
             _ => false
         };
     }
