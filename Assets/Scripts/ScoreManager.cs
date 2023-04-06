@@ -3,9 +3,9 @@ using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
-    public int Score { get; set; }
-    public int LinesCleared { get; set; }
-    public int Level { get; set; }
+    public int Score { get; private set; }
+    public int LinesCleared { get; private set; }
+    public int Level { get; private set; }
     
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI linesClearedText;
@@ -88,5 +88,6 @@ public class ScoreManager : MonoBehaviour
     {
         Score = 0;
         LinesCleared = 0;
+        Level = 0;
     }
 }
