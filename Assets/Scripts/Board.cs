@@ -19,7 +19,7 @@ public class Board : MonoBehaviour
     // The size of the board. Default is 10x20.
     [field: SerializeField] public Vector2Int BoardSize { get; set; } = new(10, 20);
 
-    [field: SerializeField] public HealthBar health { get; set; }
+    [field: SerializeField] public HealthBar Health { get; set; }
     
     [field: SerializeField] public ScoreManager ScoreManager { get; set; }
     
@@ -212,13 +212,13 @@ public class Board : MonoBehaviour
     
     public void ClearBoard()
     {
-        RectInt bounds = Bounds;
+        RectInt boardBounds = Bounds;
     
-        for (int row = bounds.yMin; row < bounds.yMax; row++)
+        for (int rowIndex = boardBounds.yMin; rowIndex < boardBounds.yMax; rowIndex++)
         {
-            for (int col = bounds.xMin; col < bounds.xMax; col++)
+            for (int columnIndex = boardBounds.xMin; columnIndex < boardBounds.xMax; columnIndex++)
             {
-                Vector3Int position = new Vector3Int(col, row, 0);
+                Vector3Int position = new Vector3Int(columnIndex, rowIndex, 0);
                 Tilemap.SetTile(position, null);
             }
         }
@@ -226,14 +226,33 @@ public class Board : MonoBehaviour
 
     public bool CheckGameOver()
     {
-        bool isGameOver = false;
-        RectInt boardBounds = Bounds;   // Get the boundaries of the board.
-        int spawnRow = SpawnPosition.y; // Get the row index where the pieces spawn.
+        if (IsGameOver()) // Check if the game is over.
+        {
+            GameOver(); // Game over.
+            return true;
+        }
 
+        return false; // No game over.
+    }
+
+    private bool IsGameOver()
+    {
         Scene currentScene = SceneManager.GetActiveScene();
         string sceneName = currentScene.name;
 
-        bool isEndlessTetris = sceneName == "EndlessTetris";
+        return sceneName switch
+        {
+            "LifeTetris" => IsLifeGameOver(),
+            "EndlessTetris" => IsEndlessGameOver(),
+            "Tetris" => IsNormalGameOver(),
+            _ => false
+        };
+    }
+
+    private bool IsLifeGameOver()
+    {
+        RectInt boardBounds = Bounds;   // Get the boundaries of the board.
+        int spawnRow = SpawnPosition.y; // Get the row index where the pieces spawn.
 
         for (int columnIndex = boardBounds.xMin; columnIndex < boardBounds.xMax; columnIndex++)
         {
@@ -242,29 +261,52 @@ public class Board : MonoBehaviour
 
             // If there's no tile at the tile position, skip to the next iteration.
             if (!Tilemap.HasTile(tilePosition)) continue;
-            isGameOver = true;
 
-            if (sceneName == "LifeTetris" && isGameOver)
-            {
-                ClearBoard();
-                isGameOver = false;
-                health.Damage();
-                if (health.health < 1)
-                    GameOver();
-            }
+            ClearBoard(); // Clear the board of all tiles.
+            Health.Damage(); // Damage the player.
 
-            if (isEndlessTetris && isGameOver)
-            {
-                ClearBoard();
-            }
-
-            if (sceneName == "Tetris" && isGameOver)
-            {
-                GameOver();
-            }
+            return Health.Health < 1; // Return true if the player is out of health, else return false.
         }
 
-        return isGameOver; // No game over.
+        return false; // No game over.
+    }
+
+    private bool IsEndlessGameOver()
+    {
+        RectInt boardBounds = Bounds;   // Get the boundaries of the board.
+        int spawnRow = SpawnPosition.y; // Get the row index where the pieces spawn.
+
+        for (int columnIndex = boardBounds.xMin; columnIndex < boardBounds.xMax; columnIndex++)
+        {
+            // Get the tile position at the spawn row and current column.
+            Vector3Int tilePosition = new Vector3Int(columnIndex, spawnRow, 0);
+
+            // If there's no tile at the tile position, skip to the next iteration.
+            if (!Tilemap.HasTile(tilePosition)) continue;
+
+            ClearBoard(); // Clear the board of all tiles.
+        }
+
+        return false; // No game over.
+    }
+
+    private bool IsNormalGameOver()
+    {
+        RectInt boardBounds = Bounds;   // Get the boundaries of the board.
+        int spawnRow = SpawnPosition.y; // Get the row index where the pieces spawn.
+
+        for (int columnIndex = boardBounds.xMin; columnIndex < boardBounds.xMax; columnIndex++)
+        {
+            // Get the tile position at the spawn row and current column.
+            Vector3Int tilePosition = new Vector3Int(columnIndex, spawnRow, 0);
+
+            // If there's no tile at the tile position, skip to the next iteration.
+            if (!Tilemap.HasTile(tilePosition)) continue;
+
+            return true; // Game over.
+        }
+
+        return false; // No game over.
     }
 
     private void GameOver()
