@@ -563,7 +563,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -1.9999989}
+  m_AnchoredPosition: {x: 0, y: -2}
   m_SizeDelta: {x: 0, y: 4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &350380727
@@ -811,19 +811,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Tetrominoes>k__BackingField:
   - <Type>k__BackingField: 0
-    <Tile>k__BackingField: {fileID: 11400000, guid: 49dc5aa86ec58974f82382656de990ed, type: 2}
+    <Tile>k__BackingField: {fileID: 11400000, guid: 9bace663d3190fe4984e793fa9b4f844, type: 2}
   - <Type>k__BackingField: 1
-    <Tile>k__BackingField: {fileID: 11400000, guid: 579ffa2c2c064d245a3cf5016522875d, type: 2}
+    <Tile>k__BackingField: {fileID: 11400000, guid: dfb7152eb103c264689b862ab15a3e0c, type: 2}
   - <Type>k__BackingField: 2
-    <Tile>k__BackingField: {fileID: 11400000, guid: 9be522891f5bfb9479ad2e1208b41364, type: 2}
+    <Tile>k__BackingField: {fileID: 11400000, guid: a8bad31d008cfb84a97d5a2db6b7c56c, type: 2}
   - <Type>k__BackingField: 3
-    <Tile>k__BackingField: {fileID: 11400000, guid: 8e8f47aff928c504bbd144e5ae2af38f, type: 2}
+    <Tile>k__BackingField: {fileID: 11400000, guid: 0d1abb9e33c9e214a969f11218c06deb, type: 2}
   - <Type>k__BackingField: 4
-    <Tile>k__BackingField: {fileID: 11400000, guid: fd657dfc522a9854e9f73c1dd15b6814, type: 2}
+    <Tile>k__BackingField: {fileID: 11400000, guid: 25c4453fe10fe7645a9bbde839259a78, type: 2}
   - <Type>k__BackingField: 5
-    <Tile>k__BackingField: {fileID: 11400000, guid: bdc12add9a2c5964e93e176517a23265, type: 2}
+    <Tile>k__BackingField: {fileID: 11400000, guid: 2d477299160284942ab1f66f38c55b39, type: 2}
   - <Type>k__BackingField: 6
-    <Tile>k__BackingField: {fileID: 11400000, guid: 91e5fa018322fb3448a9da8e2b6ddc0a, type: 2}
+    <Tile>k__BackingField: {fileID: 11400000, guid: 3577ec46bc3380141bf730cb3dedb37b, type: 2}
   <SpawnPosition>k__BackingField: {x: -1, y: 9, z: 0}
   <BoardSize>k__BackingField: {x: 10, y: 21}
   <Health>k__BackingField: {fileID: 0}
