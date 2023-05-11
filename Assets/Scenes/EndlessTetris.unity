@@ -278,8 +278,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 235, y: 180.5}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 284, y: 180.5}
+  m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &164876055
 MonoBehaviour:
@@ -825,7 +825,6 @@ MonoBehaviour:
   <StepDelay>k__BackingField: 1
   <MoveDelay>k__BackingField: 0.1
   <LockDelay>k__BackingField: 0.5
-  <ScoreManager>k__BackingField: {fileID: 1955817158}
 --- !u!1 &1005428807
 GameObject:
   m_ObjectHideFlags: 0
