@@ -4,20 +4,22 @@ namespace Tetris.Audio
 {
     public class AudioManager : MonoBehaviour
     {
-        public static AudioManager instance;
-
-        [Header("----------- Garso šaltinis ------------")] [SerializeField]
+        [SerializeField] [Header("----------- Garso šaltinis ------------")]
         private AudioSource musicSource;
 
-        [Header("----------- Garso įrašas ------------")]
-        public AudioClip backgroundMusic;
+        [SerializeField] [Header("----------- Garso įrašas ------------")]
+        private AudioClip backgroundMusic;
+
+        private static AudioManager Instance { get; set; }
+
+        private AudioClip BackgroundMusic => backgroundMusic;
 
 
         private void Awake()
         {
-            if (instance == null)
+            if (Instance == null)
             {
-                instance = this;
+                Instance = this;
                 DontDestroyOnLoad(gameObject);
             }
             else
@@ -29,13 +31,8 @@ namespace Tetris.Audio
         // Start is called before the first frame update
         private void Start()
         {
-            musicSource.clip = backgroundMusic;
+            musicSource.clip = BackgroundMusic;
             musicSource.Play();
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
         }
     }
 }
