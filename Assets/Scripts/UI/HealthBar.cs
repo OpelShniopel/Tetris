@@ -21,7 +21,6 @@ namespace Tetris.UI
 
         public void Update()
         {
-            //playerHealth = GameObject.FindWithTag("Player").GetComponent<HealthController>();
             currentHealthBar.fillAmount = Health / 3;
         }
 

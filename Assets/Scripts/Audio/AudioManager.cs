@@ -6,16 +6,6 @@ namespace Tetris.Audio
     
     public class AudioManager : MonoBehaviour
     {
-             /// <summary>
-     /// The clip to play in a menu.
-     /// This field is private because it's not designed to be directly
-     /// modified by other scripts, and tagged with [SerializeField] so that
-     /// you can still modify it using the Inspector and so that Unity
-     /// saves its value.
-     /// </summary>
-        [SerializeField]
-        private AudioClip menuMusic;
-     
      /// <summary>
      /// The clip to play outside menus.
      /// </summary>
@@ -46,34 +36,19 @@ namespace Tetris.Audio
              // Register as singleton if first
                 instance = this;
                 DontDestroyOnLoad(this);
-            } else {
-             // Self-destruct if another instance exists
-                Destroy(this);
-                return;
+            } else if(instance != this)
+            {
+                instance.source.Stop();
+                instance = this;
+                Destroy(instance);
+                PlayGameMusic();
             }
         }
- 
-        protected virtual void Start() {
-         // If the game starts in a menu scene, play the appropriate music
-            PlayMenuMusic();
-        }
-     
-     /// <summary>
-     /// Plays the music designed for the menus
-     /// This method is static so that it can be called from anywhere in the code.
-     /// </summary>
-        static public void PlayMenuMusic ()
-        {
-            if (instance != null) {
-                if (instance.source != null) {
-                    instance.source.Stop();
-                    instance.source.clip = instance.menuMusic;
-                    instance.source.Play();
-                }
-            } else {
-                Debug.LogError("Unavailable MusicPlayer component");
-            }
-        }
+
+        //protected virtual void Start()
+        //{
+        //    PlayGameMusic();
+        //}
      
      /// <summary>
      /// Plays the music designed for outside menus
@@ -83,12 +58,10 @@ namespace Tetris.Audio
         {
             if (instance != null) {
                 if (instance.source != null) {
-                    instance.source.Stop();
-                    instance.source.clip = instance.levelMusic;
-                    instance.source.Play();
+                        instance.source.Stop();
+                        instance.source.clip = instance.levelMusic;
+                        instance.source.Play();
                 }
-            } else {
-                Debug.LogError("Unavailable MusicPlayer component");
             }
         }
     }

@@ -10,7 +10,7 @@ namespace Tetris.Pieces
         [field: SerializeField] public Board GameBoard { get; set; }
         [field: SerializeField] public Piece ActivePiece { get; set; }
 
-        public Tilemap GhostTilemap { get; private set; }
+        private Tilemap GhostTilemap { get; set; }
         public Vector3Int[] GhostCells { get; private set; }
         public Vector3Int GhostPosition { get; private set; }
 

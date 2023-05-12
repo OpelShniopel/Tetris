@@ -302,8 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa8b37217a753f64daee01652b3e1f35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuMusic: {fileID: 0}
-  levelMusic: {fileID: 0}
+  levelMusic: {fileID: 8300000, guid: 550394ee05859e14eafabe89ebddbe2a, type: 3}
   source: {fileID: 1917606679}
 --- !u!1 &399465233
 GameObject:
