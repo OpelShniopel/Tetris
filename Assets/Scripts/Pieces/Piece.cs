@@ -70,9 +70,9 @@ namespace Tetris.Pieces
         {
             // Soft drop movement
             if (Input.GetKey(KeyCode.S) && Move(Vector2Int.down))
-                // Update the step time to prevent double movement
             {
-                _stepTime = Time.time + StepDelay;
+                // Update the step time to prevent double movement
+                _stepTime = Time.time + ScoreManager.Instance.GetUpdatedStepDelay();
             }
 
             // Hard drop the piece

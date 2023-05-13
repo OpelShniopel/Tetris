@@ -78,7 +78,7 @@ namespace Tetris.Core
         {
             float initialSpeed = 1f;
             float speedIncrease = 0.05f * LinesCleared;
-            float minStepDelay = 0.05f;
+            const float minStepDelay = 0.05f;
 
             // Adjust initial speed and speed increase rate based on the difficulty level
             switch (DifficultyLevel)
@@ -88,12 +88,12 @@ namespace Tetris.Core
                     speedIncrease = 0.05f * LinesCleared;
                     break;
                 case Difficulty.Medium:
-                    initialSpeed = 0.75f;
-                    speedIncrease = 0.1f * LinesCleared;
+                    initialSpeed = 0.6f;
+                    speedIncrease = 0.05f * LinesCleared;
                     break;
                 case Difficulty.Hard:
-                    initialSpeed = 0.5f;
-                    speedIncrease = 0.15f * LinesCleared;
+                    initialSpeed = 0.2f;
+                    speedIncrease = 0.05f * LinesCleared;
                     break;
             }
 

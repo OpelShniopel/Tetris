@@ -19,8 +19,6 @@ namespace Tetris.Core
 
         [field: SerializeField] public HealthBar Health { get; set; }
 
-        [field: SerializeField] public ScoreManager ScoreManager { get; set; }
-
         // The Tilemap component of the child object
         private Tilemap Tilemap { get; set; }
 
@@ -148,7 +146,7 @@ namespace Tetris.Core
 
             if (linesCleared > 0)
             {
-                ScoreManager.AddScore(linesCleared);
+                ScoreManager.Instance.AddScore(linesCleared);
             }
         }
 
