@@ -6,7 +6,6 @@ namespace Tetris.Pieces
 {
     public class Piece : MonoBehaviour
     {
-        [field: SerializeField] public float StepDelay { get; set; } = 1f;
         [field: SerializeField] public float MoveDelay { get; set; } = 0.1f;
         [field: SerializeField] public float LockDelay { get; set; } = 0.5f;
 
@@ -53,7 +52,7 @@ namespace Tetris.Pieces
             Position = position;
             RotationIndex = 0;
 
-            _stepTime = Time.time + StepDelay;
+            _stepTime = Time.time + ScoreManager.Instance.GetUpdatedStepDelay();
             _moveTime = Time.time + MoveDelay;
             _lockTime = 0f;
 

@@ -905,7 +905,7 @@ MonoBehaviour:
   <SpawnPosition>k__BackingField: {x: -1, y: 9, z: 0}
   <BoardSize>k__BackingField: {x: 10, y: 21}
   <Health>k__BackingField: {fileID: 693481339}
-  <ScoreManager>k__BackingField: {fileID: 497386492}
+  <Score>k__BackingField: {fileID: 497386492}
 --- !u!156049354 &693481336
 Grid:
   m_ObjectHideFlags: 0

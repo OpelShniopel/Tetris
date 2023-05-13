@@ -14,8 +14,6 @@ namespace Tetris.Core
         private int LinesCleared { get; set; }
         private int Level { get; set; }
 
-        private Difficulty DifficultyLevel { get; set; }
-
         private void Awake()
         {
             if (Instance == null)
@@ -76,48 +74,7 @@ namespace Tetris.Core
 
         public float GetUpdatedStepDelay()
         {
-            float initialSpeed = 1f;
-            float speedIncrease = 0.05f * LinesCleared;
-            const float minStepDelay = 0.05f;
-
-            // Adjust initial speed and speed increase rate based on the difficulty level
-            switch (DifficultyLevel)
-            {
-                case Difficulty.Easy:
-                    initialSpeed = 1f;
-                    speedIncrease = 0.05f * LinesCleared;
-                    break;
-                case Difficulty.Medium:
-                    initialSpeed = 0.6f;
-                    speedIncrease = 0.05f * LinesCleared;
-                    break;
-                case Difficulty.Hard:
-                    initialSpeed = 0.2f;
-                    speedIncrease = 0.05f * LinesCleared;
-                    break;
-            }
-
-            return Mathf.Max(initialSpeed - speedIncrease, minStepDelay);
-        }
-
-        public void SetDifficultyEasy()
-        {
-            SetDifficulty(Difficulty.Easy);
-        }
-
-        public void SetDifficultyMedium()
-        {
-            SetDifficulty(Difficulty.Medium);
-        }
-
-        public void SetDifficultyHard()
-        {
-            SetDifficulty(Difficulty.Hard);
-        }
-
-        private void SetDifficulty(Difficulty newDifficulty)
-        {
-            DifficultyLevel = newDifficulty;
+            return DifficultyManager.Instance.GetStepDelay(LinesCleared);
         }
 
         public void ResetScore()
