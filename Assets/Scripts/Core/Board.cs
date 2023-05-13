@@ -22,12 +22,12 @@ namespace Tetris.Core
         [field: SerializeField] public ScoreManager ScoreManager { get; set; }
 
         // The Tilemap component of the child object
-        public Tilemap Tilemap { get; private set; }
+        private Tilemap Tilemap { get; set; }
 
         // The Piece component of the child object
-        public Piece CurrentPiece { get; private set; }
+        private Piece CurrentPiece { get; set; }
 
-        public RectInt Bounds
+        private RectInt Bounds
         {
             get
             {
@@ -169,7 +169,7 @@ namespace Tetris.Core
             return true;
         }
 
-        public void LineClear(int row)
+        private void LineClear(int row)
         {
             RectInt bounds = Bounds;
 
@@ -194,7 +194,7 @@ namespace Tetris.Core
             }
         }
 
-        public void ClearBoard()
+        private void ClearBoard()
         {
             RectInt boardBounds = Bounds;
 

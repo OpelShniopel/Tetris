@@ -11,8 +11,8 @@ namespace Tetris.Pieces
         [field: SerializeField] public Piece ActivePiece { get; set; }
 
         private Tilemap GhostTilemap { get; set; }
-        public Vector3Int[] GhostCells { get; private set; }
-        public Vector3Int GhostPosition { get; private set; }
+        private Vector3Int[] GhostCells { get; set; }
+        private Vector3Int GhostPosition { get; set; }
 
         private void Awake()
         {

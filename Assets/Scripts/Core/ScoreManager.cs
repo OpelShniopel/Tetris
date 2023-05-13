@@ -10,11 +10,11 @@ namespace Tetris.Core
         [SerializeField] private TextMeshProUGUI levelText;
         public static ScoreManager Instance { get; private set; }
 
-        public int Score { get; private set; }
-        public int LinesCleared { get; private set; }
-        public int Level { get; private set; }
+        private int Score { get; set; }
+        private int LinesCleared { get; set; }
+        private int Level { get; set; }
 
-        public Difficulty DifficultyLevel { get; set; }
+        private Difficulty DifficultyLevel { get; set; }
 
         private void Awake()
         {

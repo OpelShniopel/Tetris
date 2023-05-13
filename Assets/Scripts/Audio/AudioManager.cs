@@ -44,11 +44,6 @@ namespace Tetris.Audio
             }
         }
 
-        //protected virtual void Start()
-        //{
-        //    PlayGameMusic();
-        //}
-
         /// <summary>
         ///     Plays the music designed for outside menus
         ///     This method is static so that it can be called from anywhere in the code.

@@ -13,13 +13,13 @@ namespace Tetris.Pieces
         private float _lockTime;
         private float _moveTime;
         private float _stepTime;
-    
-        public Board Board { get; private set; }
+
+        private Board Board { get; set; }
         public TetrominoData TetrominoData { get; private set; }
         public Vector3Int[] Cells { get; private set; }
         public Vector3Int Position { get; private set; }
 
-        public int RotationIndex { get; private set; }
+        private int RotationIndex { get; set; }
 
         private void Update()
         {
