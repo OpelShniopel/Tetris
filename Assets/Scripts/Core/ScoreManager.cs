@@ -57,8 +57,6 @@ namespace Tetris.Core
                 UpdateHighScoreText();
             }
 
-            Debug.Log($"AddScore: {LinesCleared}, {Level}, {Score}, {GetUpdatedStepDelay()}");
-
             UpdateScoreText();
             UpdateLinesClearedText();
             UpdateLevelText();
