@@ -5,7 +5,7 @@ namespace Tetris.Core
     public class DifficultyManager : MonoBehaviour
     {
         public static DifficultyManager Instance { get; private set; }
-        private Difficulty DifficultyLevel { get; set; }
+        public Difficulty DifficultyLevel { get; private set; }
 
         private void Awake()
         {

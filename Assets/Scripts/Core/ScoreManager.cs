@@ -15,10 +15,6 @@ namespace Tetris.Core
         private int LinesCleared { get; set; }
         private int Level { get; set; }
 
-        private int HighScore3Hearts { get; set; }
-        private int HighScoreRegular { get; set; }
-        private int HighScoreEndless { get; set; }
-
         private void Awake()
         {
             if (Instance == null)
@@ -34,9 +30,6 @@ namespace Tetris.Core
 
         private void Start()
         {
-            HighScore3Hearts = PlayerPrefs.GetInt("HighScore_3Hearts", 0);
-            HighScoreRegular = PlayerPrefs.GetInt("HighScore_Regular", 0);
-            HighScoreEndless = PlayerPrefs.GetInt("HighScore_Endless", 0);
             UpdateHighScoreText();
         }
 
@@ -69,32 +62,15 @@ namespace Tetris.Core
 
         private int GetHighScore()
         {
-            return GameManager.Instance.CurrentMode switch
-            {
-                "3Hearts" => HighScore3Hearts,
-                "Regular" => HighScoreRegular,
-                "Endless" => HighScoreEndless,
-                _ => 0
-            };
+            string key = $"{GameManager.Instance.CurrentMode}_{DifficultyManager.Instance.DifficultyLevel}";
+            return PlayerPrefs.GetInt($"HighScore_{key}", 0);
         }
 
         private void SetHighScore(int score)
         {
-            switch (GameManager.Instance.CurrentMode)
-            {
-                case "3Hearts":
-                    HighScore3Hearts = score;
-                    PlayerPrefs.SetInt("HighScore_3Hearts", HighScore3Hearts);
-                    break;
-                case "Regular":
-                    HighScoreRegular = score;
-                    PlayerPrefs.SetInt("HighScore_Regular", HighScoreRegular);
-                    break;
-                case "Endless":
-                    HighScoreEndless = score;
-                    PlayerPrefs.SetInt("HighScore_Endless", HighScoreEndless);
-                    break;
-            }
+            string key = $"{GameManager.Instance.CurrentMode}_{DifficultyManager.Instance.DifficultyLevel}";
+            PlayerPrefs.SetInt($"HighScore_{key}", score);
+            PlayerPrefs.Save();
         }
 
         private void UpdateScoreText()
@@ -125,22 +101,8 @@ namespace Tetris.Core
         {
             if (highScoreText)
             {
-                string highScoreLabel = "";
-
-                switch (GameManager.Instance.CurrentMode)
-                {
-                    case "3Hearts":
-                        highScoreLabel = $"High Score: {HighScore3Hearts}";
-                        break;
-                    case "Regular":
-                        highScoreLabel = $"High Score: {HighScoreRegular}";
-                        break;
-                    case "Endless":
-                        highScoreLabel = $"High Score: {HighScoreEndless}";
-                        break;
-                }
-
-                highScoreText.text = highScoreLabel;
+                int highScore = GetHighScore();
+                highScoreText.text = $"High Score: {highScore}";
             }
         }
 
