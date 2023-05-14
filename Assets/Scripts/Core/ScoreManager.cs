@@ -60,13 +60,13 @@ namespace Tetris.Core
             UpdateLevelText();
         }
 
-        private int GetHighScore()
+        private static int GetHighScore()
         {
             string key = $"{GameManager.Instance.CurrentMode}_{DifficultyManager.Instance.DifficultyLevel}";
             return PlayerPrefs.GetInt($"HighScore_{key}", 0);
         }
 
-        private void SetHighScore(int score)
+        private static void SetHighScore(int score)
         {
             string key = $"{GameManager.Instance.CurrentMode}_{DifficultyManager.Instance.DifficultyLevel}";
             PlayerPrefs.SetInt($"HighScore_{key}", score);
