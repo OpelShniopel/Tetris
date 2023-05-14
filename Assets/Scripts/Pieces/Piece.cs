@@ -6,20 +6,19 @@ namespace Tetris.Pieces
 {
     public class Piece : MonoBehaviour
     {
-        [field: SerializeField] public float StepDelay { get; set; } = 1f;
         [field: SerializeField] public float MoveDelay { get; set; } = 0.1f;
         [field: SerializeField] public float LockDelay { get; set; } = 0.5f;
 
         private float _lockTime;
         private float _moveTime;
         private float _stepTime;
-    
-        public Board Board { get; private set; }
+
+        private Board Board { get; set; }
         public TetrominoData TetrominoData { get; private set; }
         public Vector3Int[] Cells { get; private set; }
         public Vector3Int Position { get; private set; }
 
-        public int RotationIndex { get; private set; }
+        private int RotationIndex { get; set; }
 
         private void Update()
         {
@@ -53,7 +52,7 @@ namespace Tetris.Pieces
             Position = position;
             RotationIndex = 0;
 
-            _stepTime = Time.time + StepDelay;
+            _stepTime = Time.time + ScoreManager.Instance.GetUpdatedStepDelay();
             _moveTime = Time.time + MoveDelay;
             _lockTime = 0f;
 
@@ -70,9 +69,9 @@ namespace Tetris.Pieces
         {
             // Soft drop movement
             if (Input.GetKey(KeyCode.S) && Move(Vector2Int.down))
-                // Update the step time to prevent double movement
             {
-                _stepTime = Time.time + StepDelay;
+                // Update the step time to prevent double movement
+                _stepTime = Time.time + ScoreManager.Instance.GetUpdatedStepDelay();
             }
 
             // Hard drop the piece

@@ -8,25 +8,31 @@ namespace Tetris.Core
         [SerializeField] private TextMeshProUGUI scoreText;
         [SerializeField] private TextMeshProUGUI linesClearedText;
         [SerializeField] private TextMeshProUGUI levelText;
+        [SerializeField] private TextMeshProUGUI highScoreText;
         public static ScoreManager Instance { get; private set; }
 
-        public int Score { get; private set; }
-        public int LinesCleared { get; private set; }
-        public int Level { get; private set; }
-
-        public Difficulty DifficultyLevel { get; set; }
+        private int Score { get; set; }
+        private int LinesCleared { get; set; }
+        private int Level { get; set; }
 
         private void Awake()
         {
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
+                DontDestroyOnLoad(this);
             }
-            else
+            else if (Instance != this)
             {
-                Destroy(gameObject);
+                Instance = this;
+                Destroy(Instance);
+                UpdateHighScoreText();
             }
+        }
+
+        private void Start()
+        {
+            UpdateHighScoreText();
         }
 
         public void AddScore(int linesCleared)
@@ -45,9 +51,28 @@ namespace Tetris.Core
 
             Score += points;
 
+            if (Score > GetHighScore())
+            {
+                SetHighScore(Score);
+                UpdateHighScoreText();
+            }
+
             UpdateScoreText();
             UpdateLinesClearedText();
             UpdateLevelText();
+        }
+
+        private static int GetHighScore()
+        {
+            string key = $"{GameManager.Instance.CurrentMode}_{DifficultyManager.Instance.DifficultyLevel}";
+            return PlayerPrefs.GetInt($"HighScore_{key}", 0);
+        }
+
+        private static void SetHighScore(int score)
+        {
+            string key = $"{GameManager.Instance.CurrentMode}_{DifficultyManager.Instance.DifficultyLevel}";
+            PlayerPrefs.SetInt($"HighScore_{key}", score);
+            PlayerPrefs.Save();
         }
 
         private void UpdateScoreText()
@@ -74,50 +99,18 @@ namespace Tetris.Core
             }
         }
 
+        private void UpdateHighScoreText()
+        {
+            if (highScoreText)
+            {
+                int highScore = GetHighScore();
+                highScoreText.text = $"High Score: {highScore}";
+            }
+        }
+
         public float GetUpdatedStepDelay()
         {
-            float initialSpeed = 1f;
-            float speedIncrease = 0.05f * LinesCleared;
-            float minStepDelay = 0.05f;
-
-            // Adjust initial speed and speed increase rate based on the difficulty level
-            switch (DifficultyLevel)
-            {
-                case Difficulty.Easy:
-                    initialSpeed = 1f;
-                    speedIncrease = 0.05f * LinesCleared;
-                    break;
-                case Difficulty.Medium:
-                    initialSpeed = 0.75f;
-                    speedIncrease = 0.1f * LinesCleared;
-                    break;
-                case Difficulty.Hard:
-                    initialSpeed = 0.5f;
-                    speedIncrease = 0.15f * LinesCleared;
-                    break;
-            }
-
-            return Mathf.Max(initialSpeed - speedIncrease, minStepDelay);
-        }
-
-        public void SetDifficultyEasy()
-        {
-            SetDifficulty(Difficulty.Easy);
-        }
-
-        public void SetDifficultyMedium()
-        {
-            SetDifficulty(Difficulty.Medium);
-        }
-
-        public void SetDifficultyHard()
-        {
-            SetDifficulty(Difficulty.Hard);
-        }
-
-        private void SetDifficulty(Difficulty newDifficulty)
-        {
-            DifficultyLevel = newDifficulty;
+            return DifficultyManager.Instance.GetStepDelay(LinesCleared);
         }
 
         public void ResetScore()
