@@ -12,11 +12,12 @@ namespace Tetris.Core
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
+                DontDestroyOnLoad(this);
             }
-            else
+            else if (Instance != this)
             {
-                Destroy(gameObject);
+                Instance = this;
+                SetDifficulty(DifficultyLevel);
             }
         }
 

@@ -20,11 +20,13 @@ namespace Tetris.Core
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
+                DontDestroyOnLoad(this);
             }
-            else
+            else if (Instance != this)
             {
-                Destroy(gameObject);
+                Instance = this;
+                Destroy(Instance);
+                UpdateHighScoreText();
             }
         }
 
@@ -54,6 +56,8 @@ namespace Tetris.Core
                 SetHighScore(Score);
                 UpdateHighScoreText();
             }
+            
+            Debug.Log($"AddScore: {LinesCleared}, {Level}, {Score}, {GetUpdatedStepDelay()}");
 
             UpdateScoreText();
             UpdateLinesClearedText();
