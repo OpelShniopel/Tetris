@@ -58,3 +58,11 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# Additional Unity-specific ignores
+/UserSettings/
+/[Tt]etris_BurstDebugInformation_DoNotShip/
+.vsconfig
+UpgradeLog.htm
+
+.idea
+.vscode
